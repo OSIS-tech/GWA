@@ -1,0 +1,2573 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>GrowWithAhmad - Platform Pelajar Berkembang</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&family=Space+Grotesk:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --bg-primary: #0B0F19;
+            --bg-secondary: #111827;
+            --bg-card: rgba(17, 24, 39, 0.7);
+            --accent: #22c55e;
+            --accent-glow: rgba(34, 197, 94, 0.3);
+            --text-primary: #F9FAFB;
+            --text-secondary: #9CA3AF;
+            --border: rgba(255, 255, 255, 0.1);
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Inter', sans-serif;
+            background: var(--bg-primary);
+            color: var(--text-primary);
+            min-height: 100vh;
+            overflow-x: hidden;
+        }
+
+        .font-display {
+            font-family: 'Space Grotesk', sans-serif;
+        }
+
+        /* Custom Cursor */
+        .cursor-glow {
+            position: fixed;
+            width: 20px;
+            height: 20px;
+            background: var(--accent);
+            border-radius: 50%;
+            pointer-events: none;
+            z-index: 9999;
+            transform: translate(-50%, -50%);
+            transition: transform 0.1s ease, width 0.2s, height 0.2s;
+            mix-blend-mode: screen;
+            filter: blur(2px);
+        }
+
+        .cursor-dot {
+            position: fixed;
+            width: 6px;
+            height: 6px;
+            background: white;
+            border-radius: 50%;
+            pointer-events: none;
+            z-index: 10000;
+            transform: translate(-50%, -50%);
+        }
+
+        /* Glassmorphism */
+        .glass {
+            background: rgba(17, 24, 39, 0.6);
+            backdrop-filter: blur(20px);
+            border: 1px solid var(--border);
+        }
+
+        .glass-card {
+            background: linear-gradient(135deg, rgba(17, 24, 39, 0.8) 0%, rgba(17, 24, 39, 0.4) 100%);
+            backdrop-filter: blur(20px);
+            border: 1px solid rgba(255, 255, 255, 0.08);
+            box-shadow: 0 8px 32px rgba(0, 0, 0, 0.3);
+        }
+
+        /* Glow Effects */
+        .glow-green {
+            box-shadow: 0 0 30px var(--accent-glow), 0 0 60px rgba(34, 197, 94, 0.1);
+        }
+
+        .glow-text {
+            text-shadow: 0 0 40px var(--accent-glow);
+        }
+
+        /* Animations */
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(20px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        @keyframes slideUp {
+            from { opacity: 0; transform: translateY(40px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        @keyframes slideIn {
+            from { opacity: 0; transform: translateX(-30px); }
+            to { opacity: 1; transform: translateX(0); }
+        }
+
+        @keyframes pulse-glow {
+            0%, 100% { box-shadow: 0 0 20px var(--accent-glow); }
+            50% { box-shadow: 0 0 40px var(--accent-glow), 0 0 60px rgba(34, 197, 94, 0.2); }
+        }
+
+        @keyframes float {
+            0%, 100% { transform: translateY(0); }
+            50% { transform: translateY(-10px); }
+        }
+
+        @keyframes gradient-shift {
+            0% { background-position: 0% 50%; }
+            50% { background-position: 100% 50%; }
+            100% { background-position: 0% 50%; }
+        }
+
+        @keyframes spin-slow {
+            from { transform: rotate(0deg); }
+            to { transform: rotate(360deg); }
+        }
+
+        .animate-fadeIn {
+            animation: fadeIn 0.6s ease forwards;
+        }
+
+        .animate-slideUp {
+            animation: slideUp 0.8s ease forwards;
+        }
+
+        .animate-slideIn {
+            animation: slideIn 0.6s ease forwards;
+        }
+
+        .animate-pulse-glow {
+            animation: pulse-glow 2s ease-in-out infinite;
+        }
+
+        .animate-float {
+            animation: float 3s ease-in-out infinite;
+        }
+
+        /* Staggered animations */
+        .stagger-1 { animation-delay: 0.1s; opacity: 0; }
+        .stagger-2 { animation-delay: 0.2s; opacity: 0; }
+        .stagger-3 { animation-delay: 0.3s; opacity: 0; }
+        .stagger-4 { animation-delay: 0.4s; opacity: 0; }
+        .stagger-5 { animation-delay: 0.5s; opacity: 0; }
+
+        /* Background Effects */
+        .bg-grid {
+            background-image: 
+                linear-gradient(rgba(34, 197, 94, 0.03) 1px, transparent 1px),
+                linear-gradient(90deg, rgba(34, 197, 94, 0.03) 1px, transparent 1px);
+            background-size: 50px 50px;
+        }
+
+        .bg-radial {
+            background: radial-gradient(ellipse at 50% 0%, rgba(34, 197, 94, 0.1) 0%, transparent 50%);
+        }
+
+        /* Button Styles */
+        .btn-primary {
+            background: linear-gradient(135deg, #22c55e 0%, #16a34a 100%);
+            color: white;
+            font-weight: 600;
+            padding: 12px 24px;
+            border-radius: 12px;
+            border: none;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .btn-primary:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 10px 30px rgba(34, 197, 94, 0.3);
+        }
+
+        .btn-primary:active {
+            transform: translateY(0);
+        }
+
+        .btn-secondary {
+            background: transparent;
+            color: var(--text-primary);
+            font-weight: 500;
+            padding: 12px 24px;
+            border-radius: 12px;
+            border: 1px solid var(--border);
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+
+        .btn-secondary:hover {
+            background: rgba(255, 255, 255, 0.05);
+            border-color: var(--accent);
+        }
+
+        /* Input Styles */
+        .input-field {
+            width: 100%;
+            background: rgba(255, 255, 255, 0.03);
+            border: 1px solid var(--border);
+            border-radius: 12px;
+            padding: 14px 16px;
+            color: var(--text-primary);
+            font-size: 14px;
+            transition: all 0.3s ease;
+        }
+
+        .input-field:focus {
+            outline: none;
+            border-color: var(--accent);
+            box-shadow: 0 0 20px rgba(34, 197, 94, 0.15);
+            background: rgba(255, 255, 255, 0.05);
+        }
+
+        .input-field::placeholder {
+            color: var(--text-secondary);
+        }
+
+        /* Loading Screen */
+        #loading-screen {
+            position: fixed;
+            inset: 0;
+            background: var(--bg-primary);
+            z-index: 10001;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            flex-direction: column;
+        }
+
+        .loader-ring {
+            width: 80px;
+            height: 80px;
+            border: 3px solid transparent;
+            border-top-color: var(--accent);
+            border-radius: 50%;
+            animation: spin-slow 1s linear infinite;
+        }
+
+        .loader-ring::before {
+            content: '';
+            position: absolute;
+            inset: 5px;
+            border: 3px solid transparent;
+            border-top-color: rgba(34, 197, 94, 0.5);
+            border-radius: 50%;
+            animation: spin-slow 1.5s linear infinite reverse;
+        }
+
+        /* Page Containers */
+        .page {
+            display: none;
+            min-height: 100vh;
+        }
+
+        .page.active {
+            display: block;
+        }
+
+        /* Sidebar */
+        .sidebar {
+            position: fixed;
+            left: 0;
+            top: 0;
+            height: 100vh;
+            width: 260px;
+            background: linear-gradient(180deg, rgba(17, 24, 39, 0.95) 0%, rgba(17, 24, 39, 0.98) 100%);
+            backdrop-filter: blur(20px);
+            border-right: 1px solid var(--border);
+            padding: 24px 16px;
+            z-index: 100;
+            transition: transform 0.3s ease;
+        }
+
+        .sidebar-link {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            padding: 12px 16px;
+            border-radius: 10px;
+            color: var(--text-secondary);
+            transition: all 0.2s ease;
+            margin-bottom: 4px;
+        }
+
+        .sidebar-link:hover {
+            background: rgba(34, 197, 94, 0.1);
+            color: var(--text-primary);
+        }
+
+        .sidebar-link.active {
+            background: rgba(34, 197, 94, 0.15);
+            color: var(--accent);
+            border-left: 3px solid var(--accent);
+        }
+
+        /* Main Content */
+        .main-content {
+            margin-left: 260px;
+            min-height: 100vh;
+            padding: 24px;
+        }
+
+        /* Stats Cards */
+        .stat-card {
+            background: linear-gradient(135deg, rgba(17, 24, 39, 0.9) 0%, rgba(17, 24, 39, 0.6) 100%);
+            border: 1px solid var(--border);
+            border-radius: 16px;
+            padding: 24px;
+            position: relative;
+            overflow: hidden;
+            transition: all 0.3s ease;
+        }
+
+        .stat-card::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            height: 3px;
+            background: linear-gradient(90deg, var(--accent), transparent);
+        }
+
+        .stat-card:hover {
+            transform: translateY(-4px);
+            box-shadow: 0 20px 40px rgba(0, 0, 0, 0.3);
+        }
+
+        /* Table Styles */
+        .data-table {
+            width: 100%;
+            border-collapse: separate;
+            border-spacing: 0 8px;
+        }
+
+        .data-table th {
+            text-align: left;
+            padding: 12px 16px;
+            color: var(--text-secondary);
+            font-weight: 500;
+            font-size: 13px;
+            text-transform: uppercase;
+            letter-spacing: 0.05em;
+        }
+
+        .data-table td {
+            padding: 16px;
+            background: rgba(255, 255, 255, 0.02);
+            border-top: 1px solid var(--border);
+            border-bottom: 1px solid var(--border);
+        }
+
+        .data-table td:first-child {
+            border-left: 1px solid var(--border);
+            border-radius: 10px 0 0 10px;
+        }
+
+        .data-table td:last-child {
+            border-right: 1px solid var(--border);
+            border-radius: 0 10px 10px 0;
+        }
+
+        .data-table tr:hover td {
+            background: rgba(34, 197, 94, 0.05);
+        }
+
+        /* Badge */
+        .badge {
+            display: inline-flex;
+            align-items: center;
+            padding: 4px 12px;
+            border-radius: 20px;
+            font-size: 12px;
+            font-weight: 500;
+        }
+
+        .badge-success {
+            background: rgba(34, 197, 94, 0.15);
+            color: #22c55e;
+        }
+
+        .badge-warning {
+            background: rgba(234, 179, 8, 0.15);
+            color: #eab308;
+        }
+
+        .badge-info {
+            background: rgba(59, 130, 246, 0.15);
+            color: #3b82f6;
+        }
+
+        /* Modal */
+        .modal-overlay {
+            position: fixed;
+            inset: 0;
+            background: rgba(0, 0, 0, 0.8);
+            backdrop-filter: blur(8px);
+            z-index: 1000;
+            display: none;
+            align-items: center;
+            justify-content: center;
+            padding: 20px;
+        }
+
+        .modal-overlay.active {
+            display: flex;
+        }
+
+        .modal-content {
+            background: var(--bg-secondary);
+            border: 1px solid var(--border);
+            border-radius: 20px;
+            max-width: 500px;
+            width: 100%;
+            max-height: 90vh;
+            overflow-y: auto;
+            animation: fadeIn 0.3s ease;
+        }
+
+        /* Checkbox Custom */
+        .checkbox-custom {
+            width: 22px;
+            height: 22px;
+            border: 2px solid var(--border);
+            border-radius: 6px;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            transition: all 0.2s ease;
+        }
+
+        .checkbox-custom.checked {
+            background: var(--accent);
+            border-color: var(--accent);
+        }
+
+        .checkbox-custom svg {
+            width: 14px;
+            height: 14px;
+            stroke: white;
+            stroke-width: 3;
+            opacity: 0;
+            transition: opacity 0.2s ease;
+        }
+
+        .checkbox-custom.checked svg {
+            opacity: 1;
+        }
+
+        /* Scrollbar */
+        ::-webkit-scrollbar {
+            width: 8px;
+            height: 8px;
+        }
+
+        ::-webkit-scrollbar-track {
+            background: rgba(255, 255, 255, 0.02);
+        }
+
+        ::-webkit-scrollbar-thumb {
+            background: rgba(255, 255, 255, 0.1);
+            border-radius: 4px;
+        }
+
+        ::-webkit-scrollbar-thumb:hover {
+            background: rgba(255, 255, 255, 0.15);
+        }
+
+        /* Floating Orbs Background */
+        .orb {
+            position: fixed;
+            border-radius: 50%;
+            filter: blur(80px);
+            pointer-events: none;
+            z-index: 0;
+        }
+
+        .orb-1 {
+            width: 400px;
+            height: 400px;
+            background: rgba(34, 197, 94, 0.15);
+            top: -100px;
+            right: -100px;
+            animation: float 8s ease-in-out infinite;
+        }
+
+        .orb-2 {
+            width: 300px;
+            height: 300px;
+            background: rgba(34, 197, 94, 0.1);
+            bottom: -50px;
+            left: -50px;
+            animation: float 10s ease-in-out infinite reverse;
+        }
+
+        /* Mobile Sidebar Toggle */
+        .sidebar-toggle {
+            display: none;
+            position: fixed;
+            top: 16px;
+            left: 16px;
+            z-index: 101;
+            background: rgba(17, 24, 39, 0.9);
+            border: 1px solid var(--border);
+            border-radius: 10px;
+            padding: 10px;
+            cursor: pointer;
+        }
+
+        @media (max-width: 1024px) {
+            .sidebar {
+                transform: translateX(-100%);
+            }
+
+            .sidebar.open {
+                transform: translateX(0);
+            }
+
+            .main-content {
+                margin-left: 0;
+            }
+
+            .sidebar-toggle {
+                display: block;
+            }
+        }
+
+        /* Responsive */
+        @media (max-width: 768px) {
+            .stat-card {
+                padding: 16px;
+            }
+
+            .main-content {
+                padding: 16px;
+            }
+        }
+
+        /* Reduced Motion */
+        @media (prefers-reduced-motion: reduce) {
+            *, *::before, *::after {
+                animation-duration: 0.01ms !important;
+                animation-iteration-count: 1 !important;
+                transition-duration: 0.01ms !important;
+            }
+        }
+    </style>
+</head>
+<body class="bg-grid">
+    <!-- Custom Cursor -->
+    <div class="cursor-glow" id="cursor-glow"></div>
+    <div class="cursor-dot" id="cursor-dot"></div>
+
+    <!-- Background Orbs -->
+    <div class="orb orb-1"></div>
+    <div class="orb orb-2"></div>
+
+    <!-- Loading Screen -->
+    <div id="loading-screen">
+        <div class="loader-ring relative"></div>
+        <h1 class="font-display text-2xl font-bold mt-8 glow-text" style="color: var(--accent);">GrowWithAhmad</h1>
+        <p class="text-sm mt-2" style="color: var(--text-secondary);">Memuat platform pelajar berkembang...</p>
+        <div class="w-48 h-1 bg-gray-800 rounded-full mt-6 overflow-hidden">
+            <div id="loading-progress" class="h-full bg-gradient-to-r from-green-500 to-emerald-400 rounded-full transition-all duration-300" style="width: 0%"></div>
+        </div>
+    </div>
+
+    <!-- Auth Page -->
+    <div id="auth-page" class="page">
+        <div class="min-h-screen flex items-center justify-center p-4 relative">
+            <div class="absolute inset-0 bg-radial"></div>
+            
+            <div class="w-full max-w-md relative z-10">
+                <!-- Logo -->
+                <div class="text-center mb-8 animate-fadeIn">
+                    <h1 class="font-display text-4xl font-bold glow-text" style="color: var(--accent);">GrowWithAhmad</h1>
+                    <p class="text-gray-400 mt-2">Platform Pelajar Berkembang</p>
+                </div>
+
+                <!-- Auth Card -->
+                <div class="glass-card rounded-2xl p-8 animate-slideUp stagger-1">
+                    <!-- Tabs -->
+                    <div class="flex gap-2 mb-6 p-1 bg-black/20 rounded-xl">
+                        <button id="tab-login" onclick="switchAuthTab('login')" class="flex-1 py-3 px-4 rounded-lg font-medium transition-all text-sm" style="background: var(--accent); color: white;">
+                            Masuk
+                        </button>
+                        <button id="tab-register" onclick="switchAuthTab('register')" class="flex-1 py-3 px-4 rounded-lg font-medium transition-all text-sm text-gray-400 hover:text-white">
+                            Daftar
+                        </button>
+                    </div>
+
+                    <!-- Login Form -->
+                    <form id="login-form" class="space-y-4" onsubmit="handleLogin(event)">
+                        <div>
+                            <label class="block text-sm font-medium text-gray-300 mb-2">Email</label>
+                            <input type="email" id="login-email" class="input-field" placeholder="Masukkan email" required>
+                        </div>
+                        <div>
+                            <label class="block text-sm font-medium text-gray-300 mb-2">Password</label>
+                            <input type="password" id="login-password" class="input-field" placeholder="Masukkan password" required>
+                        </div>
+                        <button type="submit" class="btn-primary w-full mt-6">
+                            Masuk ke Dashboard
+                        </button>
+                    </form>
+
+                    <!-- Register Form -->
+                    <form id="register-form" class="space-y-4 hidden" onsubmit="handleRegister(event)">
+                        <div>
+                            <label class="block text-sm font-medium text-gray-300 mb-2">Nama Lengkap</label>
+                            <input type="text" id="reg-name" class="input-field" placeholder="Masukkan nama lengkap" required>
+                        </div>
+                        <div class="grid grid-cols-2 gap-4">
+                            <div>
+                                <label class="block text-sm font-medium text-gray-300 mb-2">Sekolah</label>
+                                <input type="text" id="reg-school" class="input-field" placeholder="Nama sekolah" required>
+                            </div>
+                            <div>
+                                <label class="block text-sm font-medium text-gray-300 mb-2">Kelas</label>
+                                <select id="reg-class" class="input-field" required>
+                                    <option value="">Pilih Kelas</option>
+                                    <option value="X">Kelas X</option>
+                                    <option value="XI">Kelas XI</option>
+                                    <option value="XII">Kelas XII</option>
+                                </select>
+                            </div>
+                        </div>
+                        <div>
+                            <label class="block text-sm font-medium text-gray-300 mb-2">Email</label>
+                            <input type="email" id="reg-email" class="input-field" placeholder="Masukkan email" required>
+                        </div>
+                        <div>
+                            <label class="block text-sm font-medium text-gray-300 mb-2">Password</label>
+                            <input type="password" id="reg-password" class="input-field" placeholder="Minimal 6 karakter" required minlength="6">
+                        </div>
+                        <button type="submit" class="btn-primary w-full mt-6">
+                            Buat Akun Baru
+                        </button>
+                    </form>
+
+                    <!-- Error Message -->
+                    <p id="auth-error" class="text-red-400 text-sm mt-4 text-center hidden"></p>
+                </div>
+
+                <!-- Footer -->
+                <p class="text-center text-gray-500 text-sm mt-6 animate-fadeIn stagger-3">
+                    Dengan masuk, Anda menyetujui Syarat & Ketentuan
+                </p>
+            </div>
+        </div>
+    </div>
+
+    <!-- User Dashboard -->
+    <div id="user-dashboard" class="page">
+        <!-- Mobile Sidebar Toggle -->
+        <button class="sidebar-toggle" onclick="toggleSidebar()">
+            <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                <line x1="3" y1="6" x2="21" y2="6"></line>
+                <line x1="3" y1="12" x2="21" y2="12"></line>
+                <line x1="3" y1="18" x2="21" y2="18"></line>
+            </svg>
+        </button>
+
+        <!-- Sidebar -->
+        <aside class="sidebar" id="user-sidebar">
+            <div class="mb-8">
+                <h2 class="font-display text-xl font-bold" style="color: var(--accent);">GrowWithAhmad</h2>
+                <p class="text-xs text-gray-500 mt-1">Dashboard Pengguna</p>
+            </div>
+
+            <nav class="space-y-1">
+              <a href="#" onclick="showUserSection('profile')" class="sidebar-link active" data-section="profile">
+                    <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                        <path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"></path>
+                        <circle cx="12" cy="7" r="4"></circle>
+                    </svg>
+                    <span>Profil Saya</span>
+                </a>
+                <a href="#" onclick="showUserSection('tools')" class="sidebar-link" data-section="tools">
+                    <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                        <path d="M14.7 6.3a1 1 0 0 0 0 1.4l1.6 1.6a1 1 0 0 0 1.4 0l3.77-3.77a6 6 0 0 1-7.94 7.94l-6.91 6.91a2.12 2.12 0 0 1-3-3l6.91-6.91a6 6 0 0 1 7.94-7.94l-3.76 3.76z"></path>
+                    </svg>
+                    <span>Tools</span>
+                </a>
+                <a href="#" onclick="showUserSection('insights')" class="sidebar-link" data-section="insights">
+                    <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                        <path d="M2 3h6a4 4 0 0 1 4 4v14a3 3 0 0 0-3-3H2z"></path>
+                        <path d="M22 3h-6a4 4 0 0 0-4 4v14a3 3 0 0 1 3-3h7z"></path>
+                    </svg>
+                    <span>Insights</span>
+                </a>
+                <a href="#" onclick="showUserSection('journals')" class="sidebar-link" data-section="journals">
+                    <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                        <path d="M4 19.5A2.5 2.5 0 0 1 6.5 17H20"></path>
+                        <path d="M6.5 2H20v20H6.5A2.5 2.5 0 0 1 4 19.5v-15A2.5 2.5 0 0 1 6.5 2z"></path>
+                    </svg>
+                    <span>Journal</span>
+                </a>
+                <a href="#" onclick="showUserSection('materials')" class="sidebar-link" data-section="materials">
+                    <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                        <polygon points="12 2 2 7 12 12 22 7 12 2"></polygon>
+                        <polyline points="2 17 12 22 22 17"></polyline>
+                        <polyline points="2 12 12 17 22 12"></polyline>
+                    </svg>
+                    <span>Leadership</span>
+                </a>
+            </nav>
+
+            <div class="absolute bottom-4 left-4 right-4">
+                <button onclick="logout()" class="sidebar-link w-full text-red-400 hover:bg-red-500/10">
+                    <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                        <path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4"></path>
+                        <polyline points="16 17 21 12 16 7"></polyline>
+                        <line x1="21" y1="12" x2="9" y2="12"></line>
+                    </svg>
+                    <span>Keluar</span>
+                </button>
+            </div>
+        </aside>
+
+      <!-- Main Content -->
+        <main class="main-content">
+            <!-- Profile Section -->
+            <section id="section-profile" class="user-section">
+                <div class="mb-8 animate-fadeIn">
+                    <h1 class="font-display text-3xl font-bold">Selamat Datang, <span id="user-greeting-name" style="color: var(--accent);"></span></h1>
+                    <p class="text-gray-400 mt-2">Kelola profil dan pantau perkembanganmu</p>
+                </div>
+
+                <!-- Stats Cards -->
+                <div class="grid grid-cols-1 md:grid-cols-3 gap-6 mb-8">
+                    <div class="stat-card animate-slideUp stagger-1">
+                        <div class="flex items-center justify-between">
+                            <div>
+                                <p class="text-gray-400 text-sm">Tracker Hari Ini</p>
+                                <p class="text-3xl font-bold mt-1" id="tracker-count">0/3</p>
+                            </div>
+                            <div class="w-12 h-12 rounded-xl flex items-center justify-center" style="background: rgba(34, 197, 94, 0.15);">
+                                <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="#22c55e" stroke-width="2">
+                                    <path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"></path>
+                                    <polyline points="22 4 12 14.01 9 11.01"></polyline>
+                                </svg>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="stat-card animate-slideUp stagger-2">
+                        <div class="flex items-center justify-between">
+                            <div>
+                                <p class="text-gray-400 text-sm">Status Akun</p>
+                                <p class="text-lg font-bold mt-1" id="user-status-display">Belum Diverifikasi</p>
+                            </div>
+                            <div class="w-12 h-12 rounded-xl flex items-center justify-center" style="background: rgba(234, 179, 8, 0.15);">
+                                <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="#eab308" stroke-width="2">
+                                    <circle cx="12" cy="12" r="10"></circle>
+                                    <line x1="12" y1="8" x2="12" y2="12"></line>
+                                    <line x1="12" y1="16" x2="12.01" y2="16"></line>
+                                </svg>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="stat-card animate-slideUp stagger-3">
+                        <div class="flex items-center justify-between">
+                            <div>
+                                <p class="text-gray-400 text-sm">Kelas</p>
+                                <p class="text-3xl font-bold mt-1" id="user-class-display">-</p>
+                            </div>
+                            <div class="w-12 h-12 rounded-xl flex items-center justify-center" style="background: rgba(59, 130, 246, 0.15);">
+                                <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="#3b82f6" stroke-width="2">
+                                    <path d="M22 10v6M2 10l10-5 10 5-10 5z"></path>
+                                    <path d="M6 12v5c3 3 9 3 12 0v-5"></path>
+                                </svg>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Profile Form -->
+                <div class="glass-card rounded-2xl p-6 animate-slideUp stagger-4">
+                    <h2 class="text-xl font-bold mb-6">Informasi Pribadi</h2>
+                    <form id="profile-form" class="grid grid-cols-1 md:grid-cols-2 gap-6" onsubmit="updateProfile(event)">
+                        <div>
+                            <label class="block text-sm font-medium text-gray-300 mb-2">Nama Lengkap</label>
+                            <input type="text" id="profile-name" class="input-field" placeholder="Nama lengkap">
+                        </div>
+                        <div>
+                            <label class="block text-sm font-medium text-gray-300 mb-2">No. WhatsApp</label>
+                            <input type="tel" id="profile-phone" class="input-field" placeholder="08xxxxxxxxxx">
+                        </div>
+                        <div>
+                            <label class="block text-sm font-medium text-gray-300 mb-2">Email</label>
+                            <input type="email" id="profile-email" class="input-field" placeholder="email@example.com" readonly>
+                        </div>
+                        <div>
+                            <label class="block text-sm font-medium text-gray-300 mb-2">Instagram</label>
+                            <input type="text" id="profile-instagram" class="input-field" placeholder="@username">
+                        </div>
+                        <div>
+                            <label class="block text-sm font-medium text-gray-300 mb-2">Kelas</label>
+                            <select id="profile-class" class="input-field">
+                                <option value="X">Kelas X</option>
+                                <option value="XI">Kelas XI</option>
+                                <option value="XII">Kelas XII</option>
+                            </select>
+                        </div>
+                        <div>
+                            <label class="block text-sm font-medium text-gray-300 mb-2">Provinsi</label>
+                            <select id="profile-province" class="input-field" onchange="loadCities()">
+                                <option value="">Pilih Provinsi</option>
+                            </select>
+                        </div>
+                        <div>
+                          <label class="block text-sm font-medium text-gray-300 mb-2">Kab/Kota</label>
+                            <select id="profile-city" class="input-field" onchange="loadSchools()">
+                                <option value="">Pilih Kab/Kota</option>
+                            </select>
+                        </div>
+                        <div>
+                            <label class="block text-sm font-medium text-gray-300 mb-2">Sekolah</label>
+                            <select id="profile-school" class="input-field">
+                                <option value="">Pilih Sekolah</option>
+                            </select>
+                        </div>
+                        <div class="md:col-span-2">
+                            <button type="submit" class="btn-primary">
+                                Simpan Perubahan
+                            </button>
+                        </div>
+                    </form>
+                </div>
+            </section>
+
+            <!-- Tools Section -->
+            <section id="section-tools" class="user-section hidden">
+                <div class="mb-8 animate-fadeIn">
+                    <h1 class="font-display text-3xl font-bold">Tools Interaktif</h1>
+                    <p class="text-gray-400 mt-2">Tingkatkan produktivitasmu dengan tools ini</p>
+                </div>
+
+                <div class="grid grid-cols-1 lg:grid-cols-2 gap-6">
+                    <!-- Daily Tracker -->
+                    <div class="glass-card rounded-2xl p-6 animate-slideUp stagger-1">
+                        <h2 class="text-xl font-bold mb-4">Daily Tracker</h2>
+                        <p class="text-gray-400 text-sm mb-6">Centang aktivitas yang sudah kamu lakukan hari ini</p>
+                        
+                        <div class="space-y-4">
+                            <div class="flex items-center justify-between p-4 bg-black/20 rounded-xl">
+                                <div class="flex items-center gap-4">
+                                    <div class="checkbox-custom" id="check-belajar" onclick="toggleTracker('belajar')">
+                                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor">
+                                            <polyline points="20 6 9 17 4 12"></polyline>
+                                        </svg>
+                                    </div>
+                                    <span>Belajar hari ini</span>
+                                </div>
+                                <span class="text-2xl">📚</span>
+                            </div>
+                            <div class="flex items-center justify-between p-4 bg-black/20 rounded-xl">
+                                <div class="flex items-center gap-4">
+                                    <div class="checkbox-custom" id="check-produktif" onclick="toggleTracker('produktif')">
+                                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor">
+                                            <polyline points="20 6 9 17 4 12"></polyline>
+                                        </svg>
+                                    </div>
+                                    <span>Produktif</span>
+                                </div>
+                                <span class="text-2xl">⚡</span>
+                            </div>
+                            <div class="flex items-center justify-between p-4 bg-black/20 rounded-xl">
+                                <div class="flex items-center gap-4">
+                                    <div class="checkbox-custom" id="check-berani" onclick="toggleTracker('berani')">
+                                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor">
+                                            <polyline points="20 6 9 17 4 12"></polyline>
+                                        </svg>
+                                    </div>
+                                    <span>Berani mencoba hal baru</span>
+                                </div>
+                                <span class="text-2xl">🚀</span>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Quote Generator -->
+                    <div class="glass-card rounded-2xl p-6 animate-slideUp stagger-2">
+                        <h2 class="text-xl font-bold mb-4">Quote Generator</h2>
+                        <p class="text-gray-400 text-sm mb-6">Dapatkan inspirasi harianmu</p>
+                        
+                        <div class="p-6 bg-black/20 rounded-xl mb-4">
+                            <p id="quote-display" class="text-lg italic text-center">"Klik tombol untuk mendapatkan quote inspiratif"</p>
+                            <p id="quote-author" class="text-sm text-gray-400 text-center mt-2"></p>
+                        </div>
+                        <button onclick="generateQuote()" class="btn-primary w-full">
+                            Generate Quote
+                        </button>
+                    </div>
+
+                    <!-- POV Generator -->
+                    <div class="glass-card rounded-2xl p-6 animate-slideUp stagger-3 lg:col-span-2">
+                        <h2 class="text-xl font-bold mb-4">POV Generator</h2>
+                        <p class="text-gray-400 text-sm mb-6">Ubah perspektif masalahmu menjadi peluang</p>
+                        
+                        <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                            <div>
+                              <label class="block text-sm font-medium text-gray-300 mb-2">Masalahmu</label>
+                                <textarea id="pov-input" class="input-field h-32 resize-none" placeholder="Tuliskan masalah atau situasi yang sedang kamu hadapi..."></textarea>
+                            </div>
+                            <div>
+                                <label class="block text-sm font-medium text-gray-300 mb-2">Perspektif Baru</label>
+                                <div id="pov-output" class="input-field h-32 bg-black/20 flex items-center justify-center text-gray-400">
+                                    Hasil POV akan muncul di sini
+                                </div>
+                            </div>
+                        </div>
+                        <button onclick="generatePOV()" class="btn-primary mt-4">
+                            Generate POV
+                        </button>
+                    </div>
+                </div>
+            </section>
+
+            <!-- Insights Section -->
+            <section id="section-insights" class="user-section hidden">
+                <div class="mb-8 animate-fadeIn">
+                    <h1 class="font-display text-3xl font-bold">Insights</h1>
+                    <p class="text-gray-400 mt-2">Wawasan dan pengetahuan untuk berkembang</p>
+                </div>
+
+                <div id="insights-list" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+                    <!-- Insights will be loaded here -->
+                </div>
+            </section>
+
+            <!-- Journals Section -->
+            <section id="section-journals" class="user-section hidden">
+                <div class="mb-8 animate-fadeIn">
+                    <h1 class="font-display text-3xl font-bold">Journal</h1>
+                    <p class="text-gray-400 mt-2">Baca dan renungi setiap harinya</p>
+                </div>
+
+                <div id="journals-list" class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                    <!-- Journals will be loaded here -->
+                </div>
+            </section>
+
+            <!-- Materials Section -->
+            <section id="section-materials" class="user-section hidden">
+                <div class="mb-8 animate-fadeIn">
+                    <h1 class="font-display text-3xl font-bold">Materi Leadership</h1>
+                    <p class="text-gray-400 mt-2">Pelajari keterampilan memimpin diri dan orang lain</p>
+                </div>
+
+              <div id="materials-list" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+                    <!-- Materials will be loaded here -->
+                </div>
+            </section>
+        </main>
+    </div>
+
+    <!-- Admin Dashboard -->
+    <div id="admin-dashboard" class="page">
+        <!-- Mobile Sidebar Toggle -->
+        <button class="sidebar-toggle" onclick="toggleAdminSidebar()">
+            <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                <line x1="3" y1="6" x2="21" y2="6"></line>
+                <line x1="3" y1="12" x2="21" y2="12"></line>
+                <line x1="3" y1="18" x2="21" y2="18"></line>
+            </svg>
+        </button>
+
+        <!-- Admin Sidebar -->
+        <aside class="sidebar" id="admin-sidebar">
+            <div class="mb-8">
+                <h2 class="font-display text-xl font-bold" style="color: var(--accent);">GrowWithAhmad</h2>
+                <p class="text-xs text-gray-500 mt-1">Admin Dashboard</p>
+            </div>
+
+            <nav class="space-y-1">
+                <a href="#" onclick="showAdminSection('overview')" class="sidebar-link active" data-section="overview">
+                    <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                        <rect x="3" y="3" width="7" height="7"></rect>
+                        <rect x="14" y="3" width="7" height="7"></rect>
+                        <rect x="14" y="14" width="7" height="7"></rect>
+                        <rect x="3" y="14" width="7" height="7"></rect>
+                    </svg>
+                    <span>Overview</span>
+                </a>
+                <a href="#" onclick="showAdminSection('users')" class="sidebar-link" data-section="users">
+                    <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                        <path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"></path>
+                        <circle cx="9" cy="7" r="4"></circle>
+                        <path d="M23 21v-2a4 4 0 0 0-3-3.87"></path>
+                        <path d="M16 3.13a4 4 0 0 1 0 7.75"></path>
+                    </svg>
+                    <span>Manajemen User</span>
+                    </a>
+                <a href="#" onclick="showAdminSection('contents')" class="sidebar-link" data-section="contents">
+                    <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                        <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"></path>
+                        <polyline points="14 2 14 8 20 8"></polyline>
+                    </svg>
+                    <span>Konten</span>
+                </a>
+                <a href="#" onclick="showAdminSection('statistics')" class="sidebar-link" data-section="statistics">
+                    <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                        <line x1="18" y1="20" x2="18" y2="10"></line>
+                        <line x1="12" y1="20" x2="12" y2="4"></line>
+                        <line x1="6" y1="20" x2="6" y2="14"></line>
+                    </svg>
+                    <span>Statistik</span>
+                </a>
+            </nav>
+
+            <div class="absolute bottom-4 left-4 right-4">
+                <button onclick="logout()" class="sidebar-link w-full text-red-400 hover:bg-red-500/10">
+                    <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                        <path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4"></path>
+                        <polyline points="16 17 21 12 16 7"></polyline>
+                        <line x1="21" y1="12" x2="9" y2="12"></line>
+                    </svg>
+                    <span>Keluar</span>
+                </button>
+            </div>
+        </aside>
+
+        <!-- Main Content -->
+        <main class="main-content">
+            <!-- Overview Section -->
+            <section id="admin-section-overview" class="admin-section">
+                <div class="mb-8 animate-fadeIn">
+                    <h1 class="font-display text-3xl font-bold">Dashboard Overview</h1>
+                    <p class="text-gray-400 mt-2">Pantau semua aktivitas platform</p>
+                </div>
+
+                <!-- Stats Cards -->
+                <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 mb-8">
+                    <div class="stat-card animate-slideUp stagger-1">
+                        <div class="flex items-center justify-between">
+                            <div>
+                                <p class="text-gray-400 text-sm">Total User</p>
+                                <p class="text-3xl font-bold mt-1" id="stat-total-users">0</p>
+                            </div>
+                            <div class="w-12 h-12 rounded-xl flex items-center justify-center" style="background: rgba(34, 197, 94, 0.15);">
+                                <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="#22c55e" stroke-width="2">
+                                    <path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"></path>
+                                    <circle cx="9" cy="7" r="4"></circle>
+                                    <path d="M23 21v-2a4 4 0 0 0-3-3.87"></path>
+                                    <path d="M16 3.13a4 4 0 0 1 0 7.75"></path>
+                                </svg>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="stat-card animate-slideUp stagger-2">
+                        <div class="flex items-center justify-between">
+                            <div>
+                                <p class="text-gray-400 text-sm">Total Pengunjung</p>
+                                <p class="text-3xl font-bold mt-1" id="stat-visitors">0</p>
+                            </div>
+                            <div class="w-12 h-12 rounded-xl flex items-center justify-center" style="background: rgba(59, 130, 246, 0.15);">
+                                <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="#3b82f6" stroke-width="2">
+                                    <path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"></path>
+                                    <circle cx="12" cy="12" r="3"></circle>
+                                </svg>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="stat-card animate-slideUp stagger-3">
+                        <div class="flex items-center justify-between">
+                            <div>
+                                <p class="text-gray-400 text-sm">Total Aktivitas</p>
+                                <p class="text-3xl font-bold mt-1" id="stat-activities">0</p>
+                            </div>
+                            <div class="w-12 h-12 rounded-xl flex items-center justify-center" style="background: rgba(234, 179, 8, 0.15);">
+                                <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="#eab308" stroke-width="2">
+                                    <polyline points="22 12 18 12 15 21 9 3 6 12 2 12"></polyline>
+                                </svg>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="stat-card animate-slideUp stagger-4">
+                        <div class="flex items-center justify-between">
+                            <div>
+                                <p class="text-gray-400 text-sm">User Terverifikasi</p>
+                                <p class="text-3xl font-bold mt-1" id="stat-verified">0</p>
+                            </div>
+                            <div class="w-12 h-12 rounded-xl flex items-center justify-center" style="background: rgba(139, 92, 246, 0.15);">
+                                <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="#8b5cf6" stroke-width="2">
+                                    <path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"></path>
+                                    <polyline points="22 4 12 14.01 9 11.01"></polyline>
+  </svg>
+  </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Charts -->
+                <div class="grid grid-cols-1 lg:grid-cols-2 gap-6">
+                    <div class="glass-card rounded-2xl p-6 animate-slideUp stagger-5">
+                        <h3 class="text-lg font-bold mb-4">Pengunjung 7 Hari Terakhir</h3>
+                        <canvas id="chart-visitors"></canvas>
+                    </div>
+                    <div class="glass-card rounded-2xl p-6 animate-slideUp stagger-5">
+                        <h3 class="text-lg font-bold mb-4">User Berdasarkan Kelas</h3>
+                        <canvas id="chart-classes"></canvas>
+                    </div>
+                </div>
+            </section>
+
+            <!-- Users Section -->
+            <section id="admin-section-users" class="admin-section hidden">
+                <div class="mb-8 animate-fadeIn">
+                    <h1 class="font-display text-3xl font-bold">Manajemen User</h1>
+                    <p class="text-gray-400 mt-2">Kelola semua data pengguna</p>
+                </div>
+
+                <!-- Filters -->
+                <div class="glass-card rounded-2xl p-6 mb-6 animate-slideUp stagger-1">
+                    <div class="grid grid-cols-1 md:grid-cols-4 gap-4">
+                        <div>
+                            <label class="block text-sm font-medium text-gray-300 mb-2">Cari</label>
+                            <input type="text" id="filter-search" class="input-field" placeholder="Nama atau email..." oninput="filterUsers()">
+                        </div>
+                        <div>
+                            <label class="block text-sm font-medium text-gray-300 mb-2">Provinsi</label>
+                            <select id="filter-province" class="input-field" onchange="filterUsers()">
+                                <option value="">Semua Provinsi</option>
+                            </select>
+                        </div>
+                        <div>
+                            <label class="block text-sm font-medium text-gray-300 mb-2">Kelas</label>
+                            <select id="filter-class" class="input-field" onchange="filterUsers()">
+                                <option value="">Semua Kelas</option>
+                                <option value="X">Kelas X</option>
+                                <option value="XI">Kelas XI</option>
+                                <option value="XII">Kelas XII</option>
+                            </select>
+                        </div>
+                        <div class="flex items-end">
+                            <button onclick="resetFilters()" class="btn-secondary w-full">
+                                Reset Filter
+                            </button>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Users Table -->
+                <div class="glass-card rounded-2xl overflow-hidden animate-slideUp stagger-2">
+                    <div class="overflow-x-auto">
+                        <table class="data-table">
+                            <thead>
+                                <tr>
+                                    <th>Nama</th>
+                                    <th>Email</th>
+                                    <th>Kelas</th>
+                                    <th>Provinsi</th>
+                                    <th>Status</th>
+                                    <th>Aksi</th>
+                                </tr>
+                            </thead>
+                            <tbody id="users-table-body">
+                                <!-- Users will be loaded here -->
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </section>
+
+            <!-- Contents Section -->
+            <section id="admin-section-contents" class="admin-section hidden">
+                <div class="mb-8 animate-fadeIn">
+                    <h1 class="font-display text-3xl font-bold">Manajemen Konten</h1>
+                    <p class="text-gray-400 mt-2">Kelola insights, journal, dan materi</p>
+                </div>
+
+                <!-- Content Tabs -->
+                <div class="flex gap-2 mb-6 p-1 bg-black/20 rounded-xl w-fit animate-slideUp stagger-1">
+                    <button onclick="switchContentTab('insights')" id="content-tab-insights" class="py-2 px-4 rounded-lg font-medium transition-all text-sm" style="background: var(--accent); color: white;">
+                        Insights
+                    </button>
+                    <button onclick="switchContentTab('journals')" id="content-tab-journals" class="py-2 px-4 rounded-lg font-medium transition-all text-sm text-gray-400 hover:text-white">
+                        Journals
+                    </button>
+                    <button onclick="switchContentTab('materials')" id="content-tab-materials" class="py-2 px-4 rounded-lg font-medium transition-all text-sm text-gray-400 hover:text-white">
+                        Leadership
+  </button>
+  </div>
+
+                <!-- Add Content Button -->
+                <button onclick="openContentModal()" class="btn-primary mb-6 animate-slideUp stagger-2">
+                    <span class="flex items-center gap-2">
+                        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                            <line x1="12" y1="5" x2="12" y2="19"></line>
+                            <line x1="5" y1="12" x2="19" y2="12"></line>
+                        </svg>
+                        Tambah Konten
+                    </span>
+                </button>
+
+                <!-- Content Lists -->
+                <div id="content-insights" class="content-list animate-slideUp stagger-3">
+                    <div id="admin-insights-list" class="space-y-4"></div>
+                </div>
+                <div id="content-journals" class="content-list hidden">
+                    <div id="admin-journals-list" class="space-y-4"></div>
+                </div>
+                <div id="content-materials" class="content-list hidden">
+                    <div id="admin-materials-list" class="space-y-4"></div>
+                </div>
+            </section>
+
+            <!-- Statistics Section -->
+            <section id="admin-section-statistics" class="admin-section hidden">
+                <div class="mb-8 animate-fadeIn">
+                    <h1 class="font-display text-3xl font-bold">Statistik Lengkap</h1>
+                    <p class="text-gray-400 mt-2">Analisis mendalam platform</p>
+                </div>
+
+                <div class="grid grid-cols-1 lg:grid-cols-2 gap-6">
+                    <div class="glass-card rounded-2xl p-6 animate-slideUp stagger-1">
+                        <h3 class="text-lg font-bold mb-4">Distribusi User per Provinsi</h3>
+                        <canvas id="chart-provinces"></canvas>
+                    </div>
+                    <div class="glass-card rounded-2xl p-6 animate-slideUp stagger-2">
+                        <h3 class="text-lg font-bold mb-4">Aktivitas User</h3>
+                        <canvas id="chart-activities"></canvas>
+                    </div>
+                </div>
+            </section>
+        </main>
+    </div>
+
+    <!-- Modal: Edit User -->
+    <div id="modal-edit-user" class="modal-overlay">
+        <div class="modal-content p-6">
+          <div class="flex items-center justify-between mb-6">
+                <h3 class="text-xl font-bold">Edit User</h3>
+                <button onclick="closeModal('modal-edit-user')" class="text-gray-400 hover:text-white">
+                    <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                        <line x1="18" y1="6" x2="6" y2="18"></line>
+                        <line x1="6" y1="6" x2="18" y2="18"></line>
+                    </svg>
+                </button>
+            </div>
+            <form id="edit-user-form" onsubmit="saveUserEdit(event)">
+                <input type="hidden" id="edit-user-id">
+                <div class="space-y-4">
+                    <div>
+                        <label class="block text-sm font-medium text-gray-300 mb-2">Nama</label>
+                        <input type="text" id="edit-user-name" class="input-field">
+                    </div>
+                    <div>
+                        <label class="block text-sm font-medium text-gray-300 mb-2">Email</label>
+                        <input type="email" id="edit-user-email" class="input-field" readonly>
+                    </div>
+                    <div>
+                        <label class="block text-sm font-medium text-gray-300 mb-2">Status</label>
+                        <select id="edit-user-status" class="input-field">
+                            <option value="Belum diverifikasi">Belum diverifikasi</option>
+                            <option value="Lulus">Lulus</option>
+                            <option value="Tidak Lulus">Tidak Lulus</option>
+                        </select>
+                    </div>
+                </div>
+                <div class="flex gap-4 mt-6">
+                    <button type="button" onclick="closeModal('modal-edit-user')" class="btn-secondary flex-1">Batal</button>
+                    <button type="submit" class="btn-primary flex-1">Simpan</button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <!-- Modal: Content -->
+    <div id="modal-content" class="modal-overlay">
+        <div class="modal-content p-6">
+            <div class="flex items-center justify-between mb-6">
+                <h3 class="text-xl font-bold" id="modal-content-title">Tambah Konten</h3>
+                <button onclick="closeModal('modal-content')" class="text-gray-400 hover:text-white">
+                    <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                        <line x1="18" y1="6" x2="6" y2="18"></line>
+                        <line x1="6" y1="6" x2="18" y2="18"></line>
+                    </svg>
+                </button>
+                </div>
+            <form id="content-form" onsubmit="saveContent(event)">
+                <input type="hidden" id="content-id">
+                <input type="hidden" id="content-type">
+                <div class="space-y-4">
+                    <div>
+                        <label class="block text-sm font-medium text-gray-300 mb-2">Judul</label>
+                        <input type="text" id="content-title" class="input-field" placeholder="Judul konten">
+                    </div>
+                    <div>
+                        <label class="block text-sm font-medium text-gray-300 mb-2">Konten</label>
+                        <textarea id="content-body" class="input-field h-40 resize-none" placeholder="Tulis konten di sini..."></textarea>
+                    </div>
+                </div>
+                <div class="flex gap-4 mt-6">
+                    <button type="button" onclick="closeModal('modal-content')" class="btn-secondary flex-1">Batal</button>
+                    <button type="submit" class="btn-primary flex-1">Simpan</button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <!-- Toast Notification -->
+    <div id="toast" class="fixed bottom-6 right-6 glass-card rounded-xl px-6 py-4 transform translate-y-20 opacity-0 transition-all duration-300 z-50" style="max-width: 320px;">
+        <p id="toast-message" class="text-sm"></p>
+    </div>
+
+    <script>
+        // ==========================================
+        // DATA INITIALIZATION
+        // ==========================================
+
+        const ADMIN_EMAIL = 'sektor3willas@gmail.com';
+        const ADMIN_PASSWORD = 'Growwithahmad';
+
+        // Indonesia Provinces & Cities Data
+        const provincesData = {
+          "Aceh": ["Banda Aceh", "Sabang", "Langsa", "Lhokseumawe", "Subulussalam", "Aceh Barat", "Aceh Barat Daya", "Aceh Besar", "Aceh Jaya", "Aceh Selatan", "Aceh Singkil", "Aceh Tamiang", "Aceh Tengah", "Aceh Tenggara", "Aceh Timur", "Aceh Utara", "Bener Meriah", "Bireuen", "Gayo Lues", "Nagan Jaya", "Pidie", "Pidie Jaya", "Simeulue", "Singkil"],
+            "Sumatera Utara": ["Medan", "Binjai", "Pematangsiantar", "Tanjungbalai", "Tebing Tinggi", "Sibolga", "Padang Sidempuan", "Gunungsitoli", "Asahan", "Batu Bara", "Dairi", "Deli Serdang", "Humbang Hasundutan", "Karo", "Labuhanbatu", "Labuhanbatu Selatan", "Labuhanbatu Utara", "Limapuluh Kota", "Mandailing Natal", "Nias", "Nias Barat", "Nias Selatan", "Nias Utara", "Padang Lawas", "Padang Lawas Utara", "Pakpak Bharat", "Samosir", "Serdang Bedagai", "Simalungun", "Tapanuli Selatan", "Tapanuli Tengah", "Tapanuli Utara", "Toba Samosir"],
+            "Sumatera Barat": ["Padang", "Bukittinggi", "Payakumbuh", "Pariaman", "Solok", "Sawahlunto", "Padang Panjang", "Kota Solok", "Agam", "Dharmasraya", "Kepulauan Mentawai", "Lima Puluh Kota", "Padang Pariaman", "Pasaman", "Pasaman Barat", "Pesisir Selatan", "Sijunjung", "Solok", "Solok Selatan", "Tanah Datar"],
+            "Riau": ["Pekanbaru", "Dumai", "Bengkalis", "Indragiri Hilir", "Indragiri Hulu", "Kampar", "Kepulauan Meranti", "Kuantan Singingi", "Pelalawan", "Rokan Hilir", "Rokan Hulu", "Siak"],
+            "Jambi": ["Jambi", "Muaro Jambi", "Batanghari", "Bungo", "Kerinci", "Merangin", "Sarolangun", "Tanjung Jabung Barat", "Tanjung Jabung Timur", "Tebo"],
+            "Sumatera Selatan": ["Palembang", "Prabumulih", "Pagar Alam", "Lubuklinggau", "Banyuasin", "Empat Lawang", "Lahat", "Muara Enim", "Musi Banyuasin", "Musi Rawas", "Musi Rawas Utara", "Ogan Ilir", "Ogan Komering Ilir", "Ogan Komering Ulu", "Ogan Komering Ulu Selatan", "Ogan Komering Ulu Timur", "Penukal Abab Lematang Ilir"],
+            "Bengkulu": ["Bengkulu", "Rejang Lebong", "Bengkulu Tengah", "Bengkulu Utara", "Kaur", "Kepahiang", "Lebong", "Mukomuko", "Seluma", "Kabupaten Bengkulu Selatan"],
+            "Lampung": ["Bandar Lampung", "Metro", "Lampung Barat", "Lampung Selatan", "Lampung Tengah", "Lampung Timur", "Lampung Utara", "Mesuji", "Pesawaran", "Pesisir Barat", "Pringsewu", "Tanggamus", "Tulang Bawang", "Tulang Bawang Barat", "Way Kanan"],
+            "Kepulauan Bangka Belitung": ["Pangkalpinang", "Bangka", "Bangka Barat", "Bangka Selatan", "Bangka Tengah", "Belitung", "Belitung Timur"],
+            "Kepulauan Riau": ["Batam", "Tanjung Pinang", "Bintan", "Karimun", "Kepulauan Anambas", "Lingga", "Natuna"],
+            "DKI Jakarta": ["Jakarta Pusat", "Jakarta Utara", "Jakarta Barat", "Jakarta Selatan", "Jakarta Timur", "Kepulauan Seribu"],
+            "Jawa Barat": ["Bandung", "Bekasi", "Bogor", "Cimahi", "Cirebon", "Depok", "Sukabumi", "Tasikmalaya", "Banjar", "Bandung Barat", "Bekasi", "Bogor", "Cianjur", "Cirebon", "Garut", "Indramayu", "Karawang", "Kuningan", "Majalengka", "Pangandaran", "Purwakarta", "Subang", "Sukabumi", "Sumedang", "Tasikmalaya"],
+            "Jawa Tengah": ["Semarang", "Solo", "Pekalongan", "Salatiga", "Tegal", "Magelang", "Kudus", "Surakarta", "Banjarnegara", "Banyumas", "Batang", "Blora", "Boyolali", "Brebes", "Cilacap", "Demak", "Grobogan", "Jepara", "Karanganyar", "Kebumen", "Kendal", "Klaten", "Magelang", "Pati", "Pekalongan", "Pemalang", "Purbalingga", "Purworejo", "Rembang", "Sragen", "Sukoharjo", "Tegal", "Temanggung", "Wonogiri", "Wonosobo"],
+            "DI Yogyakarta": ["Yogyakarta", "Bantul", "Gunungkidul", "Kulonprogo", "Sleman"],
+            "Jawa Timur": ["Surabaya", "Malang", "Kediri", "Blitar", "Mojokerto", "Madiun", "Probolinggo", "Pasuruan", "Jember", "Banyuwangi", "Bondowoso", "Situbondo", "Lumajang", "Nganjuk", "Magetan", "Ponorogo", "Pacitan", "Trenggalek", "Tulungagung", "Blitar", "Kediri", "Malang", "Ngawi", "Bojonegoro", "Tuban", "Lamongan", "Gresik", "Sidoarjo", "Bangkalan", "Sampang", "Pamekasan", "Sumenep"],
+            "Banten": ["Tangerang", "Serang", "Cilegon", "Tangerang Selatan", "Pandeglang", "Lebak", "Tangerang", "Serang"],
+            "Bali": ["Denpasar", "Badung", "Bangli", "Buleleng", "Gianyar", "Jembrana", "Karangasem", "Klungkung", "Tabanan", "Singaraja"],
+            "Nusa Tenggara Barat": ["Mataram", "Bima", "Lombok Barat", "Lombok Tengah", "Lombok Timur", "Lombok Utara", "Sumbawa", "Sumbawa Barat", "Dompu"],
+            "Nusa Tenggara Timur": ["Kupang", "Ende", "Flores Timur", "Kupang", "Lembata", "Manggarai", "Manggarai Barat", "Manggarai Timur", "Nagekeo", "Ngada", "Rote Ndao", "Sikka", "Sumba Barat", "Sumba Barat Daya", "Sumba Tengah", "Sumba Timur", "Timor Tengah Selatan", "Timor Tengah Utara", "Alor", "Belu", "Kupang", "Malaka"],
+            "Kalimantan Barat": ["Pontianak", "Singkawang", "Bengkayang", "Kapuas Hulu", "Kayong Utara", "Ketapang", "Kubu Raya", "Landak", "Melawi", "Mempawah", "Sambas", "Sanggau", "Sekadau", "Sintang"],
+            "Kalimantan Tengah": ["Palangka Raya", "Barito Selatan", "Barito Timur", "Barito Utara", "Gunung Mas", "Kapuas", "Katingan", "Kotawaringin Barat", "Kotawaringin Timur", "Lamandau", "Murung Raya", "Pulang Pisau", "Seruyan", "Sukamara"],
+            "Kalimantan Selatan": ["Banjarmasin", "Banjarbaru", "Tanah Laut", "Kotabaru", "Banjar", "Barito Kuala", "Tapin", "Hulu Sungai Selatan", "Hulu Sungai Tengah", "Hulu Sungai Utara", "Balangan", "Tabalong"],
+            "Kalimantan Timur": ["Samarinda", "Balikpapan", "Bontang", "Tarakan", "Berau", "Kutai Barat", "Kutai Kartanegara", "Kutai Timur", "Mahakam Ulu", "Nunukan", "Penajam Paser Utara", "Tana Tidung"],
+            "Kalimantan Utara": ["Tanjung Selor", "Malinau", "Nunukan", "Tana Tidung", "Tarakan"],
+            "Sulawesi Utara": ["Manado", "Bitung", "Tomohon", "Kotamobagu", "Bolaang Mongondow", "Bolaang Mongondow Selatan", "Bolaang Mongondow Timur", "Bolaang Mongondow Utara", "Kepulauan Sangihe", "Kepulauan Talaud", "Minahasa", "Minahasa Selatan", "Minahasa Tenggara", "Minahasa Utara", "Kepulauan Siau Tagulandang Biaro"],
+            "Sulawesi Tengah": ["Palu", "Banggai", "Banggai Kepulauan", "Banggai Laut", "Buol", "Donggala", "Morowali", "Morowali Utara", "Parigi Moutong", "Poso", "Sigi", "Tojo Una-Una", "Toli-Toli"],
+            "Sulawesi Selatan": ["Makassar", "Parepare", "Palopo", "Bantaeng", "Barru", "Bone", "Bulukumba", "Enrekang", "Gowa", "Jeneponto", "Kepulauan Selayar", "Luwu", "Luwu Timur", "Luwu Utara", "Maros", "Pangkajene Dan Kepulauan", "Pinrang", "Sidenreng Rappang", "Sinjai", "Soppeng", "Takalar", "Tana Toraja", "Toraja Utara", "Wajo"],
+            "Sulawesi Tenggara": ["Kendari", "Baubau", "Bombana", "Buton", "Buton Selatan", "Buton Tengah", "Buton Utara", "Kolaka", "Kolaka Selatan", "Kolaka Timur", "Kolaka Utara", "Konawe", "Konawe Kepulauan", "Konawe Selatan", "Konawe Tengah", "Konawe Utara", "Muna", "Muna Barat", "Wakatobi"],
+            "Gorontalo": ["Gorontalo", "Gorontalo Utara", "Bone Bolango", "Boalemo", "Pohuwato"],
+            "Sulawesi Barat": ["Mamuju", "Mamuju Utara", "Mamuju Tengah", "Majene", "Polman", "Pasangkayu"],
+            "Maluku": ["Ambon", "Tual", "Buru", "Buru Selatan", "Kepulauan Aru", "Maluku Barat Daya", "Maluku Tengah", "Maluku Tenggara", "Maluku Tenggara Barat", "Seram Bagian Barat", "Seram Bagian Timur"],
+            "Maluku Utara": ["Ternate", "Tidore", "Halmahera Barat", "Halmahera Tengah", "Halmahera Timur", "Halmahera Selatan", "Halmahera Utara", "Kepulauan Sula", "Pulau Morotai", "Pulau-Pulau Talaud"],
+            "Papua": ["Jayapura", "Merauke", "Biak Numfor", "Paniai", "Puncak Jaya", "Mimika", "Nabire", "Pegunungan Bintang", "Raja Ampat", "Sarmi", "Supiori", "Waropen", "Yahukimo", "Yalimo", "Puncak", "Dogiyai", "Intan Jaya", "Deiyai", "Lanny Jaya", "Nduga", "Paniai", "Pugu", "Tolikara", "Mamberamo Raya", "Mamberamo Tengah", "Keerom", "Kepulauan Yapen", "Asmat", "Boven Digoel", "Mappi", "Fakfak", "Kaimana", "Teluk Bintuni", "Teluk Wondama", "Sorong", "Sorong Selatan", "Maybrat", "Tambrauw", "Pegunungan Arfak", "Manokwari", "Raja Ampat"],
+            "Papua Barat": ["Manokwari", "Sorong", "Fakfak", "Kaimana", "Teluk Bintuni", "Teluk Wondama", "Raja Ampat", "Sorong Selatan", "Maybrat", "Tambrauw", "Pegunungan Arfak"],
+            "Papua Selatan": ["Merauke", "Asmat", "Mappi", "Boven Digoel"],
+            "Papua Tengah": ["Nabire", "Paniai", "Dogiyai", "Deiyai", "Intan Jaya", "Puncak", "Puncak Jaya", "Mimika"],
+            "Papua Pegunungan": ["Jayawijaya", "Pegunungan Bintang", "Yahukimo", "Tolikara", "Lanny Jaya", "Nduga", "Pugu", "Yalimo"],
+            "Papua Barat Daya": ["Sorong", "Raja Ampat", "Maybrat", "Tambrauw"]
+        };
+
+        // Schools data (sample)
+        const schoolsData = {
+          "Jakarta Pusat": ["SMAN 1 Jakarta", "SMAN 3 Jakarta", "SMAN 4 Jakarta", "SMAN 8 Jakarta", "SMAN 13 Jakarta", "SMA Labschool Jakarta", "SMA Tarakanita 1"],
+            "Jakarta Selatan": ["SMAN 6 Jakarta", "SMAN 7 Jakarta", "SMAN 21 Jakarta", "SMAN 28 Jakarta", "SMA Santa Ursula", "SMA Canisius", "SMA Labschool Kebayoran"],
+            "Jakarta Timur": ["SMAN 19 Jakarta", "SMAN 48 Jakarta", "SMAN 57 Jakarta", "SMAN 81 Jakarta", "SMA BPK Penabur"],
+            "Jakarta Barat": ["SMAN 11 Jakarta", "SMAN 12 Jakarta", "SMAN 24 Jakarta", "SMAN 78 Jakarta", "SMA Gonzaga"],
+            "Jakarta Utara": ["SMAN 17 Jakarta", "SMAN 25 Jakarta", "SMAN 62 Jakarta", "SMAN 67 Jakarta", "SMA Santa Theresia"],
+            "Bandung": ["SMAN 1 Bandung", "SMAN 2 Bandung", "SMAN 3 Bandung", "SMAN 5 Bandung", "SMAN 8 Bandung", "SMA Labschool Unila"],
+            "Surabaya": ["SMAN 1 Surabaya", "SMAN 2 Surabaya", "SMAN 4 Surabaya", "SMAN 5 Surabaya", "SMAN 8 Surabaya", "SMA Petra"],
+            "Semarang": ["SMAN 1 Semarang", "SMAN 2 Semarang", "SMAN 3 Semarang", "SMAN 5 Semarang", "SMAN 10 Semarang"],
+            "Yogyakarta": ["SMAN 1 Yogyakarta", "SMAN 2 Yogyakarta", "SMAN 3 Yogyakarta", "SMAN 6 Yogyakarta", "SMA Labschool UNY"],
+            "default": ["SMAN 1", "SMAN 2", "SMAN 3", "SMA Negeri Unggulan", "SMA Swasta Terkemuka"]
+        };
+
+        // Quotes data
+        const quotesData = [
+            { text: "Pendidikan adalah senjata paling ampuh untuk mengubah dunia.", author: "Nelson Mandela" },
+            { text: "Masa depan milik mereka yang percaya pada keindahan mimpi-mimpi mereka.", author: "Eleanor Roosevelt" },
+            { text: "Jangan biarkan apa yang tidak bisa kamu lakukan mengganggu apa yang bisa kamu lakukan.", author: "John Wooden" },
+            { text: "Sukses bukanlah akhir, kegagalan bukanlah fatal: keberanian untuk terus melanjutkanlah yang penting.", author: "Winston Churchill" },
+            { text: "Satu-satunya cara untuk melakukan pekerjaan hebat adalah dengan mencintai apa yang kamu kerjakan.", author: "Steve Jobs" },
+            { text: "Belajar dari kemarin, hidup untuk hari ini, berharap untuk besok.", author: "Albert Einstein" },
+            { text: "Kamu tidak pernah tahu seberapa kuat kamu sampai menjadi kuat adalah satu-satunya pilihan.", author: "Bob Marley" },
+            { text: "Setiap master dulunya adalah seorang pemula. Setiap profesional dulunya adalah seorang amatir.", author: "Robin Sharma" },
+            { text: "Jangan takut gagal. Takutlah untuk tidak mencoba.", author: "Roy T. Bennett" },
+            { text: "Pendidikan bukanlah persiapan untuk kehidupan; pendidikan adalah kehidupan itu sendiri.", author: "John Dewey" }
+        ];
+
+        // POV templates
+        const povTemplates = [
+            "Alih-alih melihat ini sebagai {masalah}, coba lihat sebagai {peluang} untuk {aksi}.",
+            "Setiap {masalah} menyimpan {peluang} yang menunggu untuk ditemukan.",
+            "Dibalik {masalah} ini, ada {peluang} untuk menjadi {hasil}.",
+            "{masalah} bukan akhir, tapi awal dari {peluang} baru.",
+            "Ketika {masalah} muncul, itu tandanya {peluang} sedang menanti."
+        ];
+
+        const opportunities = ["kesempatan", "peluang", "tantangan", "pengalaman berharga", "momen pembelajaran"];
+        const actions = ["tumbuh lebih kuat", "mengembangkan skill baru", "menemukan solusi kreatif", "keluar dari zona nyaman", "membuktikan kemampuanmu"];
+        const results = ["versi terbaik dirimu", "seseorang yang lebih tangguh", "pribadi yang lebih dewasa", "individu yang lebih berani", "pemimpin masa depan"];
+
+        // ==========================================
+        // UTILITY FUNCTIONS
+        // ==========================================
+
+        function showToast(message, type = 'success') {
+            const toast = document.getElementById('toast');
+            const toastMessage = document.getElementById('toast-message');
+            
+            toastMessage.textContent = message;
+          toast.style.borderColor = type === 'success' ? '#22c55e' : '#ef4444';
+            toast.style.transform = 'translateY(0)';
+            toast.style.opacity = '1';
+            
+            setTimeout(() => {
+                toast.style.transform = 'translateY(20px)';
+                toast.style.opacity = '0';
+            }, 3000);
+        }
+
+        function generateId() {
+            return Date.now().toString(36) + Math.random().toString(36).substr(2);
+        }
+
+        function formatDate(dateString) {
+            const options = { year: 'numeric', month: 'short', day: 'numeric' };
+            return new Date(dateString).toLocaleDateString('id-ID', options);
+        }
+
+        // ==========================================
+        // LOCAL STORAGE FUNCTIONS
+        // ==========================================
+
+        function getStorage(key, defaultValue = null) {
+            const data = localStorage.getItem(key);
+            return data ? JSON.parse(data) : defaultValue;
+        }
+
+        function setStorage(key, value) {
+            localStorage.setItem(key, JSON.stringify(value));
+        }
+
+        function initializeStorage() {
+            if (!getStorage('gwa_users')) setStorage('gwa_users', []);
+            if (!getStorage('gwa_stats')) {
+                setStorage('gwa_stats', {
+                    visitors: {},
+                    logins: 0,
+                    trackerChecks: 0,
+                    toolUsage: 0
+                });
+            }
+            if (!getStorage('gwa_insights')) {
+                setStorage('gwa_insights', [
+                    { id: generateId(), title: "Mindset Growth", body: "Growth mindset adalah keyakinan bahwa kemampuan bisa dikembangkan melalui dedikasi dan kerja keras. Ini menciptakan ketahanan dan semangat belajar yang diperlukan untuk prestasi besar.", createdAt: new Date().toISOString() },
+                    { id: generateId(), title: "Power of Habit", body: "Kebiasaan kecil yang dilakukan secara konsisten akan memberikan hasil yang luar biasa. Mulai dari hal kecil seperti membaca 10 halaman sehari atau menulis jurnal.", createdAt: new Date().toISOString() },
+                    { id: generateId(), title: "Discipline Equals Freedom", body: "Disiplin bukanlah keterbatasan, melainkan jembatan menuju kebebasan. Dengan disiplin, kamu memiliki kontrol atas waktu dan pilihan hidupmu.", createdAt: new Date().toISOString() }
+                ]);
+            }
+            if (!getStorage('gwa_journals')) {
+                setStorage('gwa_journals', [
+                  { id: generateId(), title: "Refleksi Pagi", body: "Mulai harimu dengan pertanyaan: Apa satu hal yang bisa saya lakukan hari ini untuk menjadi lebih baik dari kemarin? Tulis jawabannya dan lakukan.", createdAt: new Date().toISOString() },
+                    { id: generateId(), title: "Refleksi Malam", body: "Sebelum tidur, renungi: Apa yang saya pelajari hari ini? Apa yang saya syukuri? Hal apa yang bisa saya perbaiki besok?", createdAt: new Date().toISOString() }
+                ]);
+            }
+            if (!getStorage('gwa_materials')) {
+                setStorage('gwa_materials', [
+                    { id: generateId(), title: "Self-Leadership", body: "Memimpin diri sendiri adalah fondasi dari semua kepemimpinan. Ini mencakup: 1) Mengenali kekuatan dan kelemahan diri, 2) Mengelola emosi dan waktu, 3) Menetapkan dan mencapai tujuan personal, 4) Mempertahankan integritas dalam situasi apapun.", createdAt: new Date().toISOString() },
+                    { id: generateId(), title: "Communication Skills", body: "Komunikasi efektif adalah keterampilan penting seorang pemimpin: 1) Dengarkan lebih banyak dari berbicara, 2) Sampaikan pesan dengan jelas dan ringkas, 3) Perhatikan bahasa tubuh, 4) Berikan feedback konstruktif.", createdAt: new Date().toISOString() },
+                    { id: generateId(), title: "Decision Making", body: "Pengambilan keputusan yang baik memerlukan: 1) Kumpulkan informasi yang relevan, 2) Pertimbangkan berbagai alternatif, 3) Evaluasi risiko dan manfaat, 4) Ambil keputusan dengan percaya diri, 5) Evaluasi hasilnya.", createdAt: new Date().toISOString() }
+                ]);
+            }
+            if (!getStorage('gwa_visitor_count')) setStorage('gwa_visitor_count', 0);
+        }
+
+        // ==========================================
+        // CURSOR EFFECT
+        // ==========================================
+
+        function initCursor() {
+            const cursorGlow = document.getElementById('cursor-glow');
+            const cursorDot = document.getElementById('cursor-dot');
+            
+            if (window.innerWidth <= 768) {
+                cursorGlow.style.display = 'none';
+                cursorDot.style.display = 'none';
+                return;
+            }
+            
+            document.addEventListener('mousemove', (e) => {
+                cursorGlow.style.left = e.clientX + 'px';
+                cursorGlow.style.top = e.clientY + 'px';
+                cursorDot.style.left = e.clientX + 'px';
+                cursorDot.style.top = e.clientY + 'px';
+            });
+            
+            document.querySelectorAll('button, a, input, select, textarea').forEach(el => {
+                el.addEventListener('mouseenter', () => {
+                    cursorGlow.style.width = '40px';
+                    cursorGlow.style.height = '40px';
+                });
+                el.addEventListener('mouseleave', () => {
+                    cursorGlow.style.width = '20px';
+                    cursorGlow.style.height = '20px';
+                });
+            });
+        }
+
+        // ==========================================
+        // LOADING SCREEN
+      // ==========================================
+
+        function showLoading() {
+            const progress = document.getElementById('loading-progress');
+            const loadingScreen = document.getElementById('loading-screen');
+            
+            let width = 0;
+            const interval = setInterval(() => {
+                width += Math.random() * 15;
+                if (width >= 100) {
+                    width = 100;
+                    clearInterval(interval);
+                    
+                    setTimeout(() => {
+                        loadingScreen.style.opacity = '0';
+                        loadingScreen.style.transition = 'opacity 0.5s ease';
+                        
+                        setTimeout(() => {
+                            loadingScreen.style.display = 'none';
+                            checkAuth();
+                        }, 500);
+                    }, 300);
+                }
+                progress.style.width = width + '%';
+            }, 150);
+        }
+
+        // ==========================================
+        // AUTH FUNCTIONS
+        // ==========================================
+
+        function checkAuth() {
+            const currentUser = getStorage('gwa_current_user');
+            
+            // Track visitor
+            const today = new Date().toISOString().split('T')[0];
+            const stats = getStorage('gwa_stats');
+            if (!stats.visitors[today]) stats.visitors[today] = 0;
+            stats.visitors[today]++;
+            setStorage('gwa_stats', stats);
+            
+            const visitorCount = getStorage('gwa_visitor_count') + 1;
+            setStorage('gwa_visitor_count', visitorCount);
+            
+            if (currentUser) {
+                if (currentUser.isAdmin) {
+                    showAdminDashboard();
+                } else {
+                    showUserDashboard(currentUser);
+      }
+              } else {
+                showPage('auth-page');
+            }
+        }
+
+        function showPage(pageId) {
+            document.querySelectorAll('.page').forEach(page => {
+                page.classList.remove('active');
+            });
+            document.getElementById(pageId).classList.add('active');
+        }
+
+        function switchAuthTab(tab) {
+            const loginForm = document.getElementById('login-form');
+            const registerForm = document.getElementById('register-form');
+            const tabLogin = document.getElementById('tab-login');
+            const tabRegister = document.getElementById('tab-register');
+            
+            if (tab === 'login') {
+                loginForm.classList.remove('hidden');
+                registerForm.classList.add('hidden');
+                tabLogin.style.background = 'var(--accent)';
+                tabLogin.style.color = 'white';
+                tabRegister.style.background = 'transparent';
+                tabRegister.style.color = 'var(--text-secondary)';
+            } else {
+                loginForm.classList.add('hidden');
+                registerForm.classList.remove('hidden');
+                tabRegister.style.background = 'var(--accent)';
+                tabRegister.style.color = 'white';
+                tabLogin.style.background = 'transparent';
+                tabLogin.style.color = 'var(--text-secondary)';
+            }
+        }
+
+        function handleLogin(e) {
+            e.preventDefault();
+            
+            const email = document.getElementById('login-email').value.trim();
+            const password = document.getElementById('login-password').value;
+            const errorEl = document.getElementById('auth-error');
+            
+            // Check admin
+            if (email === ADMIN_EMAIL && password === ADMIN_PASSWORD) {
+                setStorage('gwa_current_user', { email: email, isAdmin: true });
+                
+                const stats = getStorage('gwa_stats');
+                stats.logins++;
+                setStorage('gwa_stats', stats);
+                
+                showAdminDashboard();
+              showToast('Selamat datang, Admin!');
+                return;
+            }
+            
+            // Check user
+            const users = getStorage('gwa_users', []);
+            const user = users.find(u => u.email === email && u.password === password);
+            
+            if (user) {
+                setStorage('gwa_current_user', { id: user.id, email: user.email, isAdmin: false });
+                
+                const stats = getStorage('gwa_stats');
+                stats.logins++;
+                setStorage('gwa_stats', stats);
+                
+                showUserDashboard(user);
+                showToast('Selamat datang kembali, ' + user.name + '!');
+            } else {
+                errorEl.textContent = 'Email atau password salah';
+                errorEl.classList.remove('hidden');
+            }
+        }
+
+        function handleRegister(e) {
+            e.preventDefault();
+            
+            const name = document.getElementById('reg-name').value.trim();
+            const school = document.getElementById('reg-school').value.trim();
+            const kelas = document.getElementById('reg-class').value;
+            const email = document.getElementById('reg-email').value.trim();
+            const password = document.getElementById('reg-password').value;
+            const errorEl = document.getElementById('auth-error');
+            
+            const users = getStorage('gwa_users', []);
+            
+            if (users.find(u => u.email === email)) {
+                errorEl.textContent = 'Email sudah terdaftar';
+                errorEl.classList.remove('hidden');
+                return;
+            }
+            
+            const newUser = {
+                id: generateId(),
+                name,
+                school,
+                class: kelas,
+                email,
+                password,
+                phone: '',
+                instagram: '',
+                province: '',
+              city: '',
+                status: 'Belum diverifikasi',
+                tracker: { belajar: false, produktif: false, berani: false },
+                createdAt: new Date().toISOString()
+            };
+            
+            users.push(newUser);
+            setStorage('gwa_users', users);
+            setStorage('gwa_current_user', { id: newUser.id, email: newUser.email, isAdmin: false });
+            
+            showUserDashboard(newUser);
+            showToast('Pendaftaran berhasil! Selamat datang!');
+        }
+
+        function logout() {
+            localStorage.removeItem('gwa_current_user');
+            showPage('auth-page');
+            showToast('Berhasil keluar');
+            
+            // Clear forms
+            document.getElementById('login-form').reset();
+            document.getElementById('register-form').reset();
+            document.getElementById('auth-error').classList.add('hidden');
+        }
+
+        // ==========================================
+        // USER DASHBOARD FUNCTIONS
+        // ==========================================
+
+        function showUserDashboard(user) {
+            showPage('user-dashboard');
+            loadUserProfile(user);
+            loadUserStats(user);
+            populateProvinceDropdown();
+            renderInsights();
+            renderJournals();
+            renderMaterials();
+        }
+
+        function loadUserProfile(user) {
+            document.getElementById('user-greeting-name').textContent = user.name.split(' ')[0];
+            document.getElementById('profile-name').value = user.name || '';
+            document.getElementById('profile-email').value = user.email || '';
+            document.getElementById('profile-phone').value = user.phone || '';
+            document.getElementById('profile-instagram').value = user.instagram || '';
+            document.getElementById('profile-class').value = user.class || 'X';
+            
+            // Load tracker state
+            const tracker = user.tracker || { belajar: false, produktif: false, berani: false };
+            updateTrackerUI(tracker);
+      }
+
+      function loadUserStats(user) {
+            const tracker = user.tracker || { belajar: false, produktif: false, berani: false };
+            const completed = Object.values(tracker).filter(v => v).length;
+            document.getElementById('tracker-count').textContent = completed + '/3';
+            document.getElementById('user-status-display').textContent = user.status || 'Belum Diverifikasi';
+            document.getElementById('user-class-display').textContent = user.class || '-';
+        }
+
+        function populateProvinceDropdown() {
+            const select = document.getElementById('profile-province');
+            select.innerHTML = '<option value="">Pilih Provinsi</option>';
+            
+            Object.keys(provincesData).forEach(province => {
+                const option = document.createElement('option');
+                option.value = province;
+                option.textContent = province;
+                select.appendChild(option);
+            });
+            
+            // Also populate filter dropdown
+            const filterSelect = document.getElementById('filter-province');
+            if (filterSelect) {
+                filterSelect.innerHTML = '<option value="">Semua Provinsi</option>';
+                Object.keys(provincesData).forEach(province => {
+                    const option = document.createElement('option');
+                    option.value = province;
+                    option.textContent = province;
+                    filterSelect.appendChild(option);
+                });
+            }
+        }
+
+        function loadCities() {
+            const province = document.getElementById('profile-province').value;
+            const citySelect = document.getElementById('profile-city');
+            const schoolSelect = document.getElementById('profile-school');
+            
+            citySelect.innerHTML = '<option value="">Pilih Kab/Kota</option>';
+            schoolSelect.innerHTML = '<option value="">Pilih Sekolah</option>';
+            
+            if (province && provincesData[province]) {
+                provincesData[province].forEach(city => {
+                    const option = document.createElement('option');
+                    option.value = city;
+                    option.textContent = city;
+                    citySelect.appendChild(option);
+                });
+            }
+        }
+
+        function loadSchools() {
+          const city = document.getElementById('profile-city').value;
+            const schoolSelect = document.getElementById('profile-school');
+            
+            schoolSelect.innerHTML = '<option value="">Pilih Sekolah</option>';
+            
+            const schools = schoolsData[city] || schoolsData['default'];
+            schools.forEach(school => {
+                const option = document.createElement('option');
+                option.value = school;
+                option.textContent = school;
+                schoolSelect.appendChild(option);
+            });
+        }
+
+        function updateProfile(e) {
+            e.preventDefault();
+            
+            const currentUser = getStorage('gwa_current_user');
+            const users = getStorage('gwa_users', []);
+            const userIndex = users.findIndex(u => u.id === currentUser.id);
+            
+            if (userIndex !== -1) {
+                users[userIndex] = {
+                    ...users[userIndex],
+                    name: document.getElementById('profile-name').value,
+                    phone: document.getElementById('profile-phone').value,
+                    instagram: document.getElementById('profile-instagram').value,
+                    class: document.getElementById('profile-class').value,
+                    province: document.getElementById('profile-province').value,
+                    city: document.getElementById('profile-city').value,
+                    school: document.getElementById('profile-school').value
+                };
+                
+                setStorage('gwa_users', users);
+                document.getElementById('user-greeting-name').textContent = users[userIndex].name.split(' ')[0];
+                document.getElementById('user-class-display').textContent = users[userIndex].class;
+                
+                showToast('Profil berhasil diperbarui!');
+            }
+        }
+
+        function showUserSection(section) {
+            document.querySelectorAll('.user-section').forEach(s => s.classList.add('hidden'));
+            document.getElementById('section-' + section).classList.remove('hidden');
+            
+            document.querySelectorAll('#user-sidebar .sidebar-link').forEach(link => {
+                link.classList.remove('active');
+                if (link.dataset.section === section) {
+                    link.classList.add('active');
+                }
+            });
+          }
+
+        function toggleSidebar() {
+            document.getElementById('user-sidebar').classList.toggle('open');
+        }
+
+        // ==========================================
+        // TOOLS FUNCTIONS
+        // ==========================================
+
+        function toggleTracker(type) {
+            const checkbox = document.getElementById('check-' + type);
+            const currentUser = getStorage('gwa_current_user');
+            const users = getStorage('gwa_users', []);
+            const userIndex = users.findIndex(u => u.id === currentUser.id);
+            
+            if (userIndex !== -1) {
+                if (!users[userIndex].tracker) {
+                    users[userIndex].tracker = { belajar: false, produktif: false, berani: false };
+                }
+                
+                users[userIndex].tracker[type] = !users[userIndex].tracker[type];
+                setStorage('gwa_users', users);
+                
+                updateTrackerUI(users[userIndex].tracker);
+                
+                const completed = Object.values(users[userIndex].tracker).filter(v => v).length;
+                document.getElementById('tracker-count').textContent = completed + '/3';
+                
+                // Update stats
+                const stats = getStorage('gwa_stats');
+                stats.trackerChecks++;
+                setStorage('gwa_stats', stats);
+            }
+        }
+
+        function updateTrackerUI(tracker) {
+            ['belajar', 'produktif', 'berani'].forEach(type => {
+                const checkbox = document.getElementById('check-' + type);
+                if (checkbox) {
+                    if (tracker[type]) {
+                        checkbox.classList.add('checked');
+                    } else {
+                        checkbox.classList.remove('checked');
+                    }
+                }
+            });
+        }
+
+        function generateQuote() {
+          const quote = quotesData[Math.floor(Math.random() * quotesData.length)];
+            document.getElementById('quote-display').textContent = '"' + quote.text + '"';
+            document.getElementById('quote-author').textContent = '— ' + quote.author;
+            
+            // Update stats
+            const stats = getStorage('gwa_stats');
+            stats.toolUsage++;
+            setStorage('gwa_stats', stats);
+        }
+
+        function generatePOV() {
+            const input = document.getElementById('pov-input').value.trim();
+            if (!input) {
+                showToast('Masukkan masalahmu terlebih dahulu', 'error');
+                return;
+            }
+            
+            const opportunity = opportunities[Math.floor(Math.random() * opportunities.length)];
+            const action = actions[Math.floor(Math.random() * actions.length)];
+            const result = results[Math.floor(Math.random() * results.length)];
+            
+            const pov = `Alih-alih fokus pada "${input}", coba lihat ini sebagai ${opportunity} untuk ${action} dan menjadi ${result}. Setiap tantangan membawa biji solusi dalam dirinya.`;
+            
+            document.getElementById('pov-output').textContent = pov;
+            document.getElementById('pov-output').style.color = 'var(--text-primary)';
+            
+            // Update stats
+            const stats = getStorage('gwa_stats');
+            stats.toolUsage++;
+            setStorage('gwa_stats', stats);
+        }
+
+        // ==========================================
+        // CONTENT RENDERING FUNCTIONS
+        // ==========================================
+
+        function renderInsights() {
+            const insights = getStorage('gwa_insights', []);
+            const container = document.getElementById('insights-list');
+            
+            container.innerHTML = insights.map(insight => `
+                <div class="glass-card rounded-2xl p-6 hover:scale-[1.02] transition-transform cursor-pointer">
+                    <h3 class="font-bold text-lg mb-3" style="color: var(--accent);">${insight.title}</h3>
+                    <p class="text-gray-300 text-sm leading-relaxed">${insight.body}</p>
+                    <p class="text-xs text-gray-500 mt-4">${formatDate(insight.createdAt)}</p>
+                </div>
+            `).join('');
+        }
+
+        function renderJournals() {
+          const journals = getStorage('gwa_journals', []);
+            const container = document.getElementById('journals-list');
+            
+            container.innerHTML = journals.map(journal => `
+                <div class="glass-card rounded-2xl p-6 hover:scale-[1.02] transition-transform cursor-pointer">
+                    <h3 class="font-bold text-lg mb-3" style="color: var(--accent);">${journal.title}</h3>
+                    <p class="text-gray-300 text-sm leading-relaxed">${journal.body}</p>
+                    <p class="text-xs text-gray-500 mt-4">${formatDate(journal.createdAt)}</p>
+                </div>
+            `).join('');
+        }
+
+        function renderMaterials() {
+            const materials = getStorage('gwa_materials', []);
+            const container = document.getElementById('materials-list');
+            
+            container.innerHTML = materials.map(material => `
+                <div class="glass-card rounded-2xl p-6 hover:scale-[1.02] transition-transform cursor-pointer">
+                    <h3 class="font-bold text-lg mb-3" style="color: var(--accent);">${material.title}</h3>
+                    <p class="text-gray-300 text-sm leading-relaxed">${material.body}</p>
+                    <p class="text-xs text-gray-500 mt-4">${formatDate(material.createdAt)}</p>
+                </div>
+            `).join('');
+        }
+
+        // ==========================================
+        // ADMIN DASHBOARD FUNCTIONS
+        // ==========================================
+
+        function showAdminDashboard() {
+            showPage('admin-dashboard');
+            loadAdminStats();
+            loadUsersTable();
+            loadAdminContent();
+            initAdminCharts();
+        }
+
+        function loadAdminStats() {
+            const users = getStorage('gwa_users', []);
+            const stats = getStorage('gwa_stats');
+            const visitorCount = getStorage('gwa_visitor_count');
+            
+            document.getElementById('stat-total-users').textContent = users.length;
+            document.getElementById('stat-visitors').textContent = visitorCount;
+            document.getElementById('stat-activities').textContent = (stats.trackerChecks || 0) + (stats.toolUsage || 0);
+            document.getElementById('stat-verified').textContent = users.filter(u => u.status === 'Lulus').length;
+        }
+
+        function loadUsersTable() {
+          const users = getStorage('gwa_users', []);
+            const tbody = document.getElementById('users-table-body');
+            
+            tbody.innerHTML = users.map(user => `
+                <tr>
+                    <td class="font-medium">${user.name}</td>
+                    <td class="text-gray-400">${user.email}</td>
+                    <td>${user.class || '-'}</td>
+                    <td class="text-gray-400">${user.province || '-'}</td>
+                    <td>
+                        <span class="badge ${user.status === 'Lulus' ? 'badge-success' : user.status === 'Tidak Lulus' ? 'badge-warning' : 'badge-info'}">
+                            ${user.status || 'Belum diverifikasi'}
+                        </span>
+                    </td>
+                    <td>
+                        <div class="flex gap-2">
+                            <button onclick="editUser('${user.id}')" class="p-2 hover:bg-white/5 rounded-lg transition" title="Edit">
+                                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#22c55e" stroke-width="2">
+                                    <path d="M11 4H4a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-7"></path>
+                                    <path d="M18.5 2.5a2.121 2.121 0 0 1 3 3L12 15l-4 1 1-4 9.5-9.5z"></path>
+                                </svg>
+                            </button>
+                            <button onclick="deleteUser('${user.id}')" class="p-2 hover:bg-white/5 rounded-lg transition" title="Hapus">
+                                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#ef4444" stroke-width="2">
+                                    <polyline points="3 6 5 6 21 6"></polyline>
+                                    <path d="M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6m3 0V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2"></path>
+                                </svg>
+                            </button>
+                        </div>
+                    </td>
+                </tr>
+            `).join('');
+        }
+
+        function filterUsers() {
+            const search = document.getElementById('filter-search').value.toLowerCase();
+            const province = document.getElementById('filter-province').value;
+            const kelas = document.getElementById('filter-class').value;
+            
+            const users = getStorage('gwa_users', []);
+            let filtered = users;
+            
+            if (search) {
+                filtered = filtered.filter(u => 
+                    u.name.toLowerCase().includes(search) || 
+                    u.email.toLowerCase().includes(search)
+                );
+            }
+            
+            if (province) {
+              filtered = filtered.filter(u => u.province === province);
+            }
+            
+            if (kelas) {
+                filtered = filtered.filter(u => u.class === kelas);
+            }
+            
+            const tbody = document.getElementById('users-table-body');
+            tbody.innerHTML = filtered.map(user => `
+                <tr>
+                    <td class="font-medium">${user.name}</td>
+                    <td class="text-gray-400">${user.email}</td>
+                    <td>${user.class || '-'}</td>
+                    <td class="text-gray-400">${user.province || '-'}</td>
+                    <td>
+                        <span class="badge ${user.status === 'Lulus' ? 'badge-success' : user.status === 'Tidak Lulus' ? 'badge-warning' : 'badge-info'}">
+                            ${user.status || 'Belum diverifikasi'}
+                        </span>
+                    </td>
+                    <td>
+                        <div class="flex gap-2">
+                            <button onclick="editUser('${user.id}')" class="p-2 hover:bg-white/5 rounded-lg transition" title="Edit">
+                                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#22c55e" stroke-width="2">
+                                    <path d="M11 4H4a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-7"></path>
+                                    <path d="M18.5 2.5a2.121 2.121 0 0 1 3 3L12 15l-4 1 1-4 9.5-9.5z"></path>
+                                </svg>
+                            </button>
+                            <button onclick="deleteUser('${user.id}')" class="p-2 hover:bg-white/5 rounded-lg transition" title="Hapus">
+                                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#ef4444" stroke-width="2">
+                                    <polyline points="3 6 5 6 21 6"></polyline>
+                                    <path d="M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6m3 0V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2"></path>
+                                </svg>
+                            </button>
+                        </div>
+                    </td>
+                </tr>
+            `).join('');
+        }
+
+        function resetFilters() {
+            document.getElementById('filter-search').value = '';
+            document.getElementById('filter-province').value = '';
+            document.getElementById('filter-class').value = '';
+            loadUsersTable();
+        }
+
+        function editUser(userId) {
+            const users = getStorage('gwa_users', []);
+            const user = users.find(u => u.id === userId);
+            
+            if (user) {
+              document.getElementById('edit-user-id').value = user.id;
+                document.getElementById('edit-user-name').value = user.name;
+                document.getElementById('edit-user-email').value = user.email;
+                document.getElementById('edit-user-status').value = user.status || 'Belum diverifikasi';
+                
+                openModal('modal-edit-user');
+            }
+        }
+
+        function saveUserEdit(e) {
+            e.preventDefault();
+            
+            const userId = document.getElementById('edit-user-id').value;
+            const users = getStorage('gwa_users', []);
+            const userIndex = users.findIndex(u => u.id === userId);
+            
+            if (userIndex !== -1) {
+                users[userIndex].name = document.getElementById('edit-user-name').value;
+                users[userIndex].status = document.getElementById('edit-user-status').value;
+                
+                setStorage('gwa_users', users);
+                closeModal('modal-edit-user');
+                loadUsersTable();
+                loadAdminStats();
+                showToast('User berhasil diperbarui!');
+            }
+        }
+
+        function deleteUser(userId) {
+            if (confirm('Yakin ingin menghapus user ini?')) {
+                const users = getStorage('gwa_users', []);
+                const filtered = users.filter(u => u.id !== userId);
+                setStorage('gwa_users', filtered);
+                
+                loadUsersTable();
+                loadAdminStats();
+                showToast('User berhasil dihapus!');
+            }
+        }
+
+        function showAdminSection(section) {
+            document.querySelectorAll('.admin-section').forEach(s => s.classList.add('hidden'));
+            document.getElementById('admin-section-' + section).classList.remove('hidden');
+            
+            document.querySelectorAll('#admin-sidebar .sidebar-link').forEach(link => {
+                link.classList.remove('active');
+                if (link.dataset.section === section) {
+                    link.classList.add('active');
+                }
+            });
+
+      if (section === 'statistics') {
+                updateStatisticsCharts();
+            }
+        }
+
+        function toggleAdminSidebar() {
+            document.getElementById('admin-sidebar').classList.toggle('open');
+        }
+
+        // ==========================================
+        // ADMIN CONTENT MANAGEMENT
+        // ==========================================
+
+        function switchContentTab(tab) {
+            document.querySelectorAll('.content-list').forEach(list => list.classList.add('hidden'));
+            document.getElementById('content-' + tab).classList.remove('hidden');
+            
+            document.querySelectorAll('[id^="content-tab-"]').forEach(btn => {
+                btn.style.background = 'transparent';
+                btn.style.color = 'var(--text-secondary)';
+            });
+            document.getElementById('content-tab-' + tab).style.background = 'var(--accent)';
+            document.getElementById('content-tab-' + tab).style.color = 'white';
+            
+            // Store current tab
+            document.getElementById('content-type').value = tab;
+        }
+
+        function loadAdminContent() {
+            renderAdminInsights();
+            renderAdminJournals();
+            renderAdminMaterials();
+        }
+
+        function renderAdminInsights() {
+            const insights = getStorage('gwa_insights', []);
+            const container = document.getElementById('admin-insights-list');
+            
+            container.innerHTML = insights.map(item => `
+                <div class="glass-card rounded-xl p-4 flex justify-between items-start">
+                    <div>
+                        <h4 class="font-bold">${item.title}</h4>
+                        <p class="text-sm text-gray-400 mt-1 line-clamp-2">${item.body.substring(0, 100)}...</p>
+                        <p class="text-xs text-gray-500 mt-2">${formatDate(item.createdAt)}</p>
+                    </div>
+                    <div class="flex gap-2">
+                        <button onclick="editContent('insights', '${item.id}')" class="p-2 hover:bg-white/5 rounded-lg">
+                            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#22c55e" stroke-width="2">
+                                <path d="M11 4H4a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-7"></path>
+                                <path d="M18.5 2.5a2.121 2.121 0 0 1 3 3L12 15l-4 1 1-4 9.5-9.5z"></path>
+                            </svg>
+                            </button>
+                        <button onclick="deleteContent('insights', '${item.id}')" class="p-2 hover:bg-white/5 rounded-lg">
+                            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#ef4444" stroke-width="2">
+                                <polyline points="3 6 5 6 21 6"></polyline>
+                                <path d="M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6m3 0V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2"></path>
+                            </svg>
+                        </button>
+                    </div>
+                </div>
+            `).join('');
+        }
+
+        function renderAdminJournals() {
+            const journals = getStorage('gwa_journals', []);
+            const container = document.getElementById('admin-journals-list');
+            
+            container.innerHTML = journals.map(item => `
+                <div class="glass-card rounded-xl p-4 flex justify-between items-start">
+                    <div>
+                        <h4 class="font-bold">${item.title}</h4>
+                        <p class="text-sm text-gray-400 mt-1 line-clamp-2">${item.body.substring(0, 100)}...</p>
+                        <p class="text-xs text-gray-500 mt-2">${formatDate(item.createdAt)}</p>
+                    </div>
+                    <div class="flex gap-2">
+                        <button onclick="editContent('journals', '${item.id}')" class="p-2 hover:bg-white/5 rounded-lg">
+                            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#22c55e" stroke-width="2">
+                                <path d="M11 4H4a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-7"></path>
+                                <path d="M18.5 2.5a2.121 2.121 0 0 1 3 3L12 15l-4 1 1-4 9.5-9.5z"></path>
+                            </svg>
+                        </button>
+                        <button onclick="deleteContent('journals', '${item.id}')" class="p-2 hover:bg-white/5 rounded-lg">
+                            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#ef4444" stroke-width="2">
+                                <polyline points="3 6 5 6 21 6"></polyline>
+                                <path d="M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6m3 0V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2"></path>
+                            </svg>
+                        </button>
+                    </div>
+                </div>
+            `).join('');
+        }
+
+        function renderAdminMaterials() {
+            const materials = getStorage('gwa_materials', []);
+            const container = document.getElementById('admin-materials-list');
+            
+            container.innerHTML = materials.map(item => `
+                <div class="glass-card rounded-xl p-4 flex justify-between items-start">
+                    <div>
+                    <h4 class="font-bold">${item.title}</h4>
+                        <p class="text-sm text-gray-400 mt-1 line-clamp-2">${item.body.substring(0, 100)}...</p>
+                        <p class="text-xs text-gray-500 mt-2">${formatDate(item.createdAt)}</p>
+                    </div>
+                    <div class="flex gap-2">
+                        <button onclick="editContent('materials', '${item.id}')" class="p-2 hover:bg-white/5 rounded-lg">
+                            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#22c55e" stroke-width="2">
+                                <path d="M11 4H4a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-7"></path>
+                                <path d="M18.5 2.5a2.121 2.121 0 0 1 3 3L12 15l-4 1 1-4 9.5-9.5z"></path>
+                            </svg>
+                        </button>
+                        <button onclick="deleteContent('materials', '${item.id}')" class="p-2 hover:bg-white/5 rounded-lg">
+                            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#ef4444" stroke-width="2">
+                                <polyline points="3 6 5 6 21 6"></polyline>
+                                <path d="M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6m3 0V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2"></path>
+                            </svg>
+                        </button>
+                    </div>
+                </div>
+            `).join('');
+        }
+
+        let currentContentTab = 'insights';
+
+        function openContentModal(type = null) {
+            // Determine current tab
+            const activeTab = document.querySelector('[id^="content-tab-"][style*="background"]');
+            if (activeTab) {
+                currentContentTab = activeTab.id.replace('content-tab-', '');
+            }
+            
+            document.getElementById('content-id').value = '';
+            document.getElementById('content-type').value = currentContentTab;
+            document.getElementById('content-title').value = '';
+            document.getElementById('content-body').value = '';
+            document.getElementById('modal-content-title').textContent = 'Tambah Konten';
+            
+            openModal('modal-content');
+        }
+
+        function editContent(type, id) {
+            const storageKey = 'gwa_' + type;
+            const items = getStorage(storageKey, []);
+            const item = items.find(i => i.id === id);
+            
+            if (item) {
+              document.getElementById('content-id').value = item.id;
+                document.getElementById('content-type').value = type;
+                document.getElementById('content-title').value = item.title;
+                document.getElementById('content-body').value = item.body;
+                document.getElementById('modal-content-title').textContent = 'Edit Konten';
+                
+                openModal('modal-content');
+            }
+        }
+
+        function saveContent(e) {
+            e.preventDefault();
+            
+            const id = document.getElementById('content-id').value;
+            const type = document.getElementById('content-type').value;
+            const title = document.getElementById('content-title').value;
+            const body = document.getElementById('content-body').value;
+            
+            const storageKey = 'gwa_' + type;
+            const items = getStorage(storageKey, []);
+            
+            if (id) {
+                // Edit existing
+                const index = items.findIndex(i => i.id === id);
+                if (index !== -1) {
+                    items[index].title = title;
+                    items[index].body = body;
+                }
+            } else {
+                // Add new
+                items.push({
+                    id: generateId(),
+                    title,
+                    body,
+                    createdAt: new Date().toISOString()
+                });
+            }
+            
+            setStorage(storageKey, items);
+            closeModal('modal-content');
+            
+            // Refresh the correct list
+            if (type === 'insights') renderAdminInsights();
+            else if (type === 'journals') renderAdminJournals();
+            else if (type === 'materials') renderAdminMaterials();
+            
+            showToast('Konten berhasil disimpan!');
+        }
+
+        function deleteContent(type, id) {
+          if (confirm('Yakin ingin menghapus konten ini?')) {
+                const storageKey = 'gwa_' + type;
+                const items = getStorage(storageKey, []);
+                const filtered = items.filter(i => i.id !== id);
+                setStorage(storageKey, filtered);
+                
+                // Refresh the correct list
+                if (type === 'insights') renderAdminInsights();
+                else if (type === 'journals') renderAdminJournals();
+                else if (type === 'materials') renderAdminMaterials();
+                
+                showToast('Konten berhasil dihapus!');
+            }
+        }
+
+        // ==========================================
+        // MODAL FUNCTIONS
+        // ==========================================
+
+        function openModal(modalId) {
+            document.getElementById(modalId).classList.add('active');
+        }
+
+        function closeModal(modalId) {
+            document.getElementById(modalId).classList.remove('active');
+        }
+
+        // ==========================================
+        // CHARTS FUNCTIONS
+        // ==========================================
+
+        let visitorChart = null;
+        let classChart = null;
+        let provinceChart = null;
+        let activityChart = null;
+
+        function initAdminCharts() {
+            const stats = getStorage('gwa_stats');
+            const users = getStorage('gwa_users', []);
+            
+            // Destroy existing charts
+            if (visitorChart) visitorChart.destroy();
+            if (classChart) classChart.destroy();
+            
+            // Visitor Chart
+            const visitorCtx = document.getElementById('chart-visitors');
+            if (visitorCtx) {
+                const last7Days = [];
+                const visitorData = [];
+                
+                for (let i = 6; i >= 0; i--) {
+                  const date = new Date();
+                    date.setDate(date.getDate() - i);
+                    const dateStr = date.toISOString().split('T')[0];
+                    last7Days.push(date.toLocaleDateString('id-ID', { weekday: 'short' }));
+                    visitorData.push(stats.visitors[dateStr] || 0);
+                }
+                
+                visitorChart = new Chart(visitorCtx, {
+                    type: 'line',
+                    data: {
+                        labels: last7Days,
+                        datasets: [{
+                            label: 'Pengunjung',
+                            data: visitorData,
+                            borderColor: '#22c55e',
+                            backgroundColor: 'rgba(34, 197, 94, 0.1)',
+                            fill: true,
+                            tension: 0.4,
+                            pointBackgroundColor: '#22c55e',
+                            pointBorderColor: '#22c55e',
+                            pointRadius: 4
+                        }]
+                    },
+                    options: {
+                        responsive: true,
+                        plugins: {
+                            legend: { display: false }
+                        },
+                        scales: {
+                            y: {
+                                beginAtZero: true,
+                                grid: { color: 'rgba(255,255,255,0.05)' },
+                                ticks: { color: '#9CA3AF' }
+                            },
+                            x: {
+                                grid: { color: 'rgba(255,255,255,0.05)' },
+                                ticks: { color: '#9CA3AF' }
+                            }
+                        }
+                    }
+                });
+            }
+            
+            // Class Chart
+            const classCtx = document.getElementById('chart-classes');
+            if (classCtx) {
+                const classData = {
+                  'X': users.filter(u => u.class === 'X').length,
+                    'XI': users.filter(u => u.class === 'XI').length,
+                    'XII': users.filter(u => u.class === 'XII').length
+                };
+                
+                classChart = new Chart(classCtx, {
+                    type: 'bar',
+                    data: {
+                        labels: ['Kelas X', 'Kelas XI', 'Kelas XII'],
+                        datasets: [{
+                            label: 'Jumlah User',
+                            data: [classData['X'], classData['XI'], classData['XII']],
+                            backgroundColor: [
+                                'rgba(34, 197, 94, 0.8)',
+                                'rgba(59, 130, 246, 0.8)',
+                                'rgba(168, 85, 247, 0.8)'
+                            ],
+                            borderRadius: 8
+                        }]
+                    },
+                    options: {
+                        responsive: true,
+                        plugins: {
+                            legend: { display: false }
+                        },
+                        scales: {
+                            y: {
+                                beginAtZero: true,
+                                grid: { color: 'rgba(255,255,255,0.05)' },
+                                ticks: { color: '#9CA3AF' }
+                            },
+                            x: {
+                                grid: { display: false },
+                                ticks: { color: '#9CA3AF' }
+                            }
+                        }
+                    }
+                });
+            }
+        }
+
+        function updateStatisticsCharts() {
+            const users = getStorage('gwa_users', []);
+            const stats = getStorage('gwa_stats');
+            
+            // Province Chart
+            const provinceCtx = document.getElementById('chart-provinces');
+            if (provinceCtx) {
+                if (provinceChart) provinceChart.destroy();
+
+          const provinceData = {};
+                users.forEach(u => {
+                    if (u.province) {
+                        provinceData[u.province] = (provinceData[u.province] || 0) + 1;
+                    }
+                });
+                
+                const sortedProvinces = Object.entries(provinceData)
+                    .sort((a, b) => b[1] - a[1])
+                    .slice(0, 5);
+                
+                const colors = ['#22c55e', '#3b82f6', '#a855f7', '#f59e0b', '#ef4444'];
+                
+                provinceChart = new Chart(provinceCtx, {
+                    type: 'doughnut',
+                    data: {
+                        labels: sortedProvinces.map(p => p[0]),
+                        datasets: [{
+                            data: sortedProvinces.map(p => p[1]),
+                            backgroundColor: colors,
+                            borderWidth: 0
+                        }]
+                    },
+                    options: {
+                        responsive: true,
+                        plugins: {
+                            legend: {
+                                position: 'bottom',
+                                labels: { color: '#9CA3AF', padding: 20 }
+                            }
+                        }
+                    }
+                });
+            }
+            
+            // Activity Chart
+            const activityCtx = document.getElementById('chart-activities');
+            if (activityCtx) {
+                if (activityChart) activityChart.destroy();
+                
+                activityChart = new Chart(activityCtx, {
+                    type: 'bar',
+                    data: {
+                        labels: ['Tracker Checks', 'Tool Usage', 'Logins'],
+                        datasets: [{
+                            label: 'Jumlah',
+                            data: [stats.trackerChecks || 0, stats.toolUsage || 0, stats.logins || 0],
+                            backgroundColor: [
+                              'rgba(34, 197, 94, 0.8)',
+                                'rgba(59, 130, 246, 0.8)',
+                                'rgba(168, 85, 247, 0.8)'
+                            ],
+                            borderRadius: 8
+                        }]
+                    },
+                    options: {
+                        responsive: true,
+                        plugins: {
+                            legend: { display: false }
+                        },
+                        scales: {
+                            y: {
+                                beginAtZero: true,
+                                grid: { color: 'rgba(255,255,255,0.05)' },
+                                ticks: { color: '#9CA3AF' }
+                            },
+                            x: {
+                                grid: { display: false },
+                                ticks: { color: '#9CA3AF' }
+                            }
+                        }
+                    }
+                });
+            }
+        }
+
+        // ==========================================
+        // INITIALIZATION
+        // ==========================================
+
+        document.addEventListener('DOMContentLoaded', function() {
+            initializeStorage();
+            initCursor();
+            showLoading();
+            
+            // Close modals on backdrop click
+            document.querySelectorAll('.modal-overlay').forEach(modal => {
+                modal.addEventListener('click', function(e) {
+                    if (e.target === this) {
+                        this.classList.remove('active');
+                    }
+                });
+            });
+            
+            // Keyboard accessibility
+            document.addEventListener('keydown', function(e) {
+                if (e.key === 'Escape') {
+                  document.querySelectorAll('.modal-overlay.active').forEach(modal => {
+                        modal.classList.remove('active');
+                    });
+                }
+            });
+        });
+    </script>
+</body>
+</html>
